@@ -7,24 +7,25 @@ generator client {
 
 datasource db {
     provider  = "postgresql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url       = env("DATABASE_URL")
     directUrl = env("DIRECT_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
+// User model for authentication and user-specific data
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    posts         Post[]
+    incomes       Income[]
+    expenses      Expense[]
+    budgets       Budget[]
+    savingsGoals  SavingsGoal[]
+    investments   Investment[]
 }
 
 // Necessary for Next auth
@@ -34,12 +35,12 @@ model Account {
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
+    refresh_token            String? 
+    access_token             String? 
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String? 
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
@@ -55,21 +56,87 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
-}
-
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+// Post model (if needed for other parts of the application)
+model Post {
+    id        Int      @id @default(autoincrement())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+
+    @@index([name])
+}
+
+// Income model to track different income sources
+model Income {
+    id          Int      @id @default(autoincrement())
+    amount      Float
+    date        DateTime
+    description String?
+    source      String
+    userId      String
+    user        User     @relation(fields: [userId], references: [id])
+
+    @@index([source])
+}
+
+// Expense model to track user expenses
+model Expense {
+    id          Int      @id @default(autoincrement())
+    amount      Float
+    date        DateTime
+    category    String
+    description String?
+    userId      String
+    user        User     @relation(fields: [userId], references: [id])
+
+    @@index([category])
+}
+
+// Budget model for planning expenses
+model Budget {
+    id          Int      @id @default(autoincrement())
+    month       DateTime
+    category    String
+    amount      Float
+    userId      String
+    user        User     @relation(fields: [userId], references: [id])
+
+    @@index([month, category])
+}
+
+// SavingsGoal model to track user savings goals
+model SavingsGoal {
+    id          Int      @id @default(autoincrement())
+    goalName    String
+    targetAmount Float
+    currentAmount Float   @default(0)
+    targetDate  DateTime
+    userId      String
+    user        User     @relation(fields: [userId], references: [id])
+
+    @@index([goalName])
+}
+
+// Investment model to track user investments
+model Investment {
+    id            Int      @id @default(autoincrement())
+    name          String
+    type          String
+    amountInvested Float
+    currentValue  Float
+    userId        String
+    user          User     @relation(fields: [userId], references: [id])
+
+    @@index([type])
 }
