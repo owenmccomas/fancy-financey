@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -11,7 +8,6 @@ datasource db {
     directUrl = env("DIRECT_URL")
 }
 
-// User model for authentication and user-specific data
 model User {
     id            String    @id @default(cuid())
     name          String?
@@ -20,7 +16,6 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
     incomes       Income[]
     expenses      Expense[]
     budgets       Budget[]
@@ -28,7 +23,6 @@ model User {
     investments   Investment[]
 }
 
-// Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
     userId                   String
@@ -64,20 +58,7 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// Post model (if needed for other parts of the application)
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
-// Income model to track different income sources
 model Income {
     id          Int      @id @default(autoincrement())
     amount      Float
@@ -90,7 +71,6 @@ model Income {
     @@index([source])
 }
 
-// Expense model to track user expenses
 model Expense {
     id          Int      @id @default(autoincrement())
     amount      Float
@@ -115,7 +95,6 @@ model Budget {
     @@index([month, category])
 }
 
-// SavingsGoal model to track user savings goals
 model SavingsGoal {
     id          Int      @id @default(autoincrement())
     goalName    String
@@ -128,7 +107,6 @@ model SavingsGoal {
     @@index([goalName])
 }
 
-// Investment model to track user investments
 model Investment {
     id            Int      @id @default(autoincrement())
     name          String
