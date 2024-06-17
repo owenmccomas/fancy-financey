@@ -83,7 +83,6 @@ model Expense {
     @@index([category])
 }
 
-// Budget model for planning expenses
 model Budget {
     id          Int      @id @default(autoincrement())
     month       DateTime
