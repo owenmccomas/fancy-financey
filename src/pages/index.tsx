@@ -1,25 +1,34 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-
+import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api";
 import { Outline } from "@/components/Outline";
 
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const { data: sessionData } = useSession();
 
-  return (
-    <>
-      <Head>
-        <title>Finance Tracker</title>
-        <meta name="description" content="A simple finance tracker app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <Outline />
-      </main>
-    </>
-  );
+  if (!sessionData) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <h2 className="m-5">You are not signed in</h2>
+        <Button onClick={() => signIn()}>Sign In</Button>
+      </div>
+    );
+  } else
+    return (
+      <>
+        <Head>
+          <title>Finance Tracker</title>
+          <meta name="description" content="A simple finance tracker app" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+          <Outline />
+        </main>
+      </>
+    );
 }
 
 function AuthShowcase() {

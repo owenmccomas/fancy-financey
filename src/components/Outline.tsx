@@ -18,22 +18,28 @@ To read more about using these font, please visit the Next.js documentation:
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
 import { Card, CardContent } from "@/components/ui/card";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 // import { ResponsiveLine } from "@nivo/line"
 import { JSX, SVGProps } from "react";
 
 export function Outline() {
+  const sessionData = useSession().data;
+
   return (
-    <div className="grid min-h-screen w-screen grid-cols-1 bg-gray-100 dark:bg-gray-950 md:grid-cols-[1fr_300px]">
-      <main className="mx-10 flex w-full flex-col items-start justify-center gap-8 md:p-8">
+    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-50 md:grid-cols-[1fr_300px]">
+      <main className="ml-80 flex w-full flex-col items-start justify-center gap-8 pr-80">
         <div className="flex w-full flex-col items-start justify-center gap-4">
+          <p className="text-3xl text-gray-700 dark:text-gray-400">
+            Hey, {sessionData?.user?.name?.split(" ")[0]}!
+          </p>
           <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
             $89,432
           </div>
           <p className="text-gray-500 dark:text-gray-400">Current Net Worth</p>
         </div>
         <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-          <Card className="col-span-2 pt-4 md:col-span-2">
+          <Card className="col-span-2 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-2 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
               <CardContent className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
@@ -78,9 +84,9 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-1 pt-4 md:col-span-1">
+          <Card className="col-span-1 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-1 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
-              <CardContent className="flex flex-col items-start justify-center gap-4">
+              <CardContent className="flex h-full flex-col items-center justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
                   <div>
                     <PiggyBankIcon className="h-8 w-8 text-primary" />
@@ -93,9 +99,9 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-1 pt-4 md:col-span-1">
+          <Card className="col-span-1 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-1 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
-              <CardContent className="flex flex-col items-start justify-center gap-4">
+              <CardContent className="flex h-full flex-col items-center justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
                   <div>
                     <TrendingUpIcon className="h-8 w-8 text-primary" />
@@ -110,7 +116,7 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-2 pt-4 md:col-span-2">
+          <Card className="col-span-2 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-2 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
               <CardContent className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
@@ -155,7 +161,7 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-3 pt-4 md:col-span-3">
+          <Card className="col-span-3 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-3 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
               <CardContent className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
@@ -202,7 +208,7 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-2 pt-4 md:col-span-2">
+          <Card className="col-span-2 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-2 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
               <CardContent className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
@@ -227,7 +233,7 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-1 pt-4 md:col-span-1">
+          <Card className="col-span-1 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-1 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
               <CardContent className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
@@ -242,7 +248,7 @@ export function Outline() {
               </CardContent>
             </Link>
           </Card>
-          <Card className="col-span-3 pt-4 md:col-span-3">
+          <Card className="col-span-3 pt-4 transition hover:scale-105 hover:shadow-md md:col-span-3 bg-gradient-to-br from-white to-slate-50">
             <Link href="#">
               <CardContent className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-between">
@@ -259,7 +265,7 @@ export function Outline() {
           </Card>
         </div>
       </main>
-      <aside className="group fixed right-0 hidden w-20 bg-gray-100/40 transition-all duration-500 ease-in-out hover:w-64 dark:bg-gray-800/40 md:flex top-1/2 -translate-y-1/2">
+      <aside className="group fixed right-0 top-1/2 hidden w-20 -translate-y-1/2 transition-all duration-500 ease-in-out hover:w-64 md:flex">
         <div className="flex-1 overflow-auto py-2">
           <div className="h-full overflow-hidden">
             <nav className="flex h-full flex-col items-start px-2 text-base font-medium">
@@ -303,6 +309,7 @@ export function Outline() {
                   href: "#",
                   icon: <UserIcon className="h-7 w-7" />,
                   label: "Account",
+                  onClick: () => signOut(),
                 },
                 {
                   href: "#",
@@ -313,8 +320,9 @@ export function Outline() {
                 <Link
                   key={index}
                   href={item.href}
-                  className="flex w-full items-center gap-4 rounded-lg px-4 py-3 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  className="flex w-full items-center gap-4 rounded-lg px-4 py-3 text-gray-700 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                   prefetch={false}
+                  onClick={item.onClick}
                 >
                   <div className="mr-2 flex-shrink-0">{item.icon}</div>
                   <span className="duration-250 translate-x-full transform transition-transform ease-in-out group-hover:translate-x-0">
