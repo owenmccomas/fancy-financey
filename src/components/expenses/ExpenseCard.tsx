@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Expense } from "./expensesData";
+import type { Expense } from "./expensesData";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
