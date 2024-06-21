@@ -18,6 +18,8 @@ export function Outline() {
   const { data: topExpenses } = api.expenses.getTopExpenses.useQuery({
     limit: 4,
   });
+  const { data: investmentsAmount } =
+    api.investments.get.useQuery();
 
   return (
     <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-50 md:grid-cols-[1fr_300px]">
@@ -52,10 +54,10 @@ export function Outline() {
             value={savingsAmount?.toFixed(2) ?? "---.--"}
           />
           <HomeCard
-            href="#"
+            href="/investments"
             icon={TrendingUp}
             title="Investments"
-            value="$45,678"
+            value={investmentsAmount?.toFixed(2) ?? "---.--"}
           />
           <HomeCard
             href="#"
