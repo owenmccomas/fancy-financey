@@ -31,7 +31,7 @@ const navItems = [
       label: "Savings",
     },
     {
-      href: "#",
+      href: "/investments",
       icon: <TrendingUpIcon className="h-7 w-7" />,
       label: "Investments",
     },
