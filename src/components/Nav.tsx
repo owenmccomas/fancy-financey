@@ -12,60 +12,64 @@ import {
   WalletIcon,
 } from "../lib/svgs";
 
+const navItems = [
+  [
+    {
+      href: "/",
+      icon: <HomeIcon className="h-7 w-7" />,
+      label: "Dashboard",
+    },
+    {
+      href: "/expenses",
+      icon: <WalletIcon className="h-7 w-7" />,
+      label: "Expenses",
+    },
+    {
+      href: "#",
+      icon: <TrendingUpIcon className="h-7 w-7" />,
+      label: "Investments",
+    },
+    {
+      href: "#",
+      icon: <CalendarIcon className="h-7 w-7" />,
+      label: "Bills",
+    },
+    {
+      href: "#",
+      icon: <PiggyBankIcon className="h-7 w-7" />,
+      label: "Savings",
+    },
+    {
+      href: "#",
+      icon: <BarChartIcon className="h-7 w-7" />,
+      label: "Budgeting",
+    },
+    {
+      href: "#",
+      icon: <DollarSignIcon className="h-7 w-7" />,
+      label: "Income",
+    },
+    {
+      href: "#",
+      icon: <UserIcon className="h-7 w-7" />,
+      label: "Account",
+      onClick: () => signOut(),
+    },
+    {
+      href: "#",
+      icon: <SettingsIcon className="h-7 w-7" />,
+      label: "Settings",
+    },
+  ]
+].flat();
+
 export default function Nav() {
   return (
     <aside className="group fixed right-0 top-1/2 hidden w-20 -translate-y-1/2 transition-all duration-500 ease-in-out hover:w-64 md:flex">
       <div className="flex-1 overflow-auto py-2">
         <div className="h-full overflow-hidden">
           <nav className="flex h-full flex-col items-start px-2 text-base font-medium">
-            {[
-              {
-                href: "/",
-                icon: <HomeIcon className="h-7 w-7" />,
-                label: "Dashboard",
-              },
-              {
-                href: "/expenses",
-                icon: <WalletIcon className="h-7 w-7" />,
-                label: "Expenses",
-              },
-              {
-                href: "#",
-                icon: <TrendingUpIcon className="h-7 w-7" />,
-                label: "Investments",
-              },
-              {
-                href: "#",
-                icon: <CalendarIcon className="h-7 w-7" />,
-                label: "Bills",
-              },
-              {
-                href: "#",
-                icon: <PiggyBankIcon className="h-7 w-7" />,
-                label: "Savings",
-              },
-              {
-                href: "#",
-                icon: <BarChartIcon className="h-7 w-7" />,
-                label: "Budgeting",
-              },
-              {
-                href: "#",
-                icon: <DollarSignIcon className="h-7 w-7" />,
-                label: "Income",
-              },
-              {
-                href: "#",
-                icon: <UserIcon className="h-7 w-7" />,
-                label: "Account",
-                onClick: () => signOut(),
-              },
-              {
-                href: "#",
-                icon: <SettingsIcon className="h-7 w-7" />,
-                label: "Settings",
-              },
-            ].map((item, index) => (
+            {navItems.map((item, index) => (
               <Link
                 key={index}
                 href={item.href}
