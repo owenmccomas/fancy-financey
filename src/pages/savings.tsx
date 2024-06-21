@@ -15,9 +15,9 @@ export default function SavingsTracker() {
   const { data: savingsAmount, refetch: refetchSavings } =
     api.savings.get.useQuery();
   const { mutate: updateSavings } = api.savings.update.useMutation({
-    onSuccess: () => {
+    onSuccess: async() => {
       console.log("Savings updated successfully");
-      refetchSavings();
+      await refetchSavings();
     },
     onError: (error) => {
       console.error("Detailed error updating savings:", error);

@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Nav from "../components/Nav";
 import { HomeCard } from "@/components/HomeCard";
+import { api } from "@/utils/api";
 import {
   Wallet,
   PiggyBank,
@@ -11,8 +12,12 @@ import {
   Briefcase,
 } from "lucide-react";
 
+
 export function Outline() {
   const sessionData = useSession().data;
+  const { data: savingsAmount } =
+  api.savings.get.useQuery();
+
 
   return (
     <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-50 md:grid-cols-[1fr_300px]">
@@ -44,7 +49,7 @@ export function Outline() {
             href="/savings"
             icon={PiggyBank}
             title="Savings"
-            value="$8,901"
+            value={savingsAmount?.toFixed(2) ?? "0.00"}
           />
           <HomeCard
             href="#"
