@@ -19,7 +19,7 @@ export default function SavingsTracker() {
       console.log("Savings updated successfully");
       await refetchSavings();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Detailed error updating savings:", error);
       setErrorMessage(
         `An error occurred while updating savings: ${error.message}`,

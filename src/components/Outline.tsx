@@ -12,12 +12,13 @@ import {
   Briefcase,
 } from "lucide-react";
 
-
 export function Outline() {
   const sessionData = useSession().data;
-  const { data: savingsAmount } =
-  api.savings.get.useQuery();
-
+  const { data: savingsAmount } = api.savings.get.useQuery();
+  const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
+  const { data: topExpenses } = api.expenses.getTopExpenses.useQuery({
+    limit: 4,
+  });
 
   return (
     <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-50 md:grid-cols-[1fr_300px]">
@@ -36,20 +37,20 @@ export function Outline() {
             href="/expenses"
             icon={Wallet}
             title="Expenses"
-            value="$12,345"
+            value={`$${totalExpenses?.toFixed(2) ?? "---.--"}`}
             className="col-span-2"
-            subItems={[
-              { label: "Rent", value: "$1,500" },
-              { label: "Auto", value: "$350" },
-              { label: "Utilities", value: "$200" },
-              { label: "Groceries", value: "$500" },
-            ]}
+            subItems={
+              topExpenses?.map((expense) => ({
+                label: expense.title,
+                value: `$${expense.amount.toFixed(2) ?? "--.--"}`,
+              })) ?? []
+            }
           />
           <HomeCard
             href="/savings"
             icon={PiggyBank}
             title="Savings"
-            value={savingsAmount?.toFixed(2) ?? "0.00"}
+            value={savingsAmount?.toFixed(2) ?? "---.--"}
           />
           <HomeCard
             href="#"
@@ -70,7 +71,7 @@ export function Outline() {
               { label: "Phone", value: "$75" },
             ]}
           />
-          <HomeCard
+          {/* <HomeCard
             href="#"
             icon={BarChart}
             title="Budgeting"
@@ -82,7 +83,7 @@ export function Outline() {
               { label: "Misc", value: "$500" },
               { label: "Savings", value: "$1,456" },
             ]}
-          />
+          /> */}
           <HomeCard
             href="#"
             icon={DollarSign}

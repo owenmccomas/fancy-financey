@@ -73,6 +73,7 @@ model Income {
 
 model Expense {
   id          Int      @id @default(autoincrement())
+  title       String
   amount      Float
   date        DateTime
   category    String
