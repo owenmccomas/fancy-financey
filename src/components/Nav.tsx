@@ -10,6 +10,7 @@ import {
   TrendingUpIcon,
   UserIcon,
   WalletIcon,
+  BriefcaseIcon
 } from "../lib/svgs";
 
 const navItems = [
@@ -25,6 +26,11 @@ const navItems = [
       label: "Expenses",
     },
     {
+      href: "/savings",
+      icon: <PiggyBankIcon className="h-7 w-7" />,
+      label: "Savings",
+    },
+    {
       href: "#",
       icon: <TrendingUpIcon className="h-7 w-7" />,
       label: "Investments",
@@ -36,11 +42,6 @@ const navItems = [
     },
     {
       href: "#",
-      icon: <PiggyBankIcon className="h-7 w-7" />,
-      label: "Savings",
-    },
-    {
-      href: "#",
       icon: <BarChartIcon className="h-7 w-7" />,
       label: "Budgeting",
     },
@@ -48,6 +49,11 @@ const navItems = [
       href: "#",
       icon: <DollarSignIcon className="h-7 w-7" />,
       label: "Income",
+    },
+    {
+      href: "#",
+      icon: <BriefcaseIcon className="h-7 w-7" />,
+      label: "Assets",
     },
     {
       href: "#",

@@ -26,13 +26,13 @@ export function Outline() {
           </div>
           <p className="text-gray-500 dark:text-gray-400">Current Net Worth</p>
         </div>
-        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid w-full grid-cols-3 gap-4">
           <HomeCard
             href="/expenses"
             icon={Wallet}
             title="Expenses"
             value="$12,345"
-            colSpan={2}
+            className="col-span-2"
             subItems={[
               { label: "Rent", value: "$1,500" },
               { label: "Auto", value: "$350" },
@@ -40,7 +40,12 @@ export function Outline() {
               { label: "Groceries", value: "$500" },
             ]}
           />
-          <HomeCard href="#" icon={PiggyBank} title="Savings" value="$8,901" />
+          <HomeCard
+            href="/savings"
+            icon={PiggyBank}
+            title="Savings"
+            value="$8,901"
+          />
           <HomeCard
             href="#"
             icon={TrendingUp}
@@ -52,7 +57,7 @@ export function Outline() {
             icon={Calendar}
             title="Bills"
             value="$2,345"
-            colSpan={2}
+            className="col-span-2"
             subItems={[
               { label: "Electricity", value: "$150" },
               { label: "Water", value: "$75" },
@@ -65,7 +70,7 @@ export function Outline() {
             icon={BarChart}
             title="Budgeting"
             value="$3,456"
-            colSpan={3}
+            className="col-span-3"
             subItems={[
               { label: "Food", value: "$1,000" },
               { label: "Entertainment", value: "$500" },
@@ -78,7 +83,7 @@ export function Outline() {
             icon={DollarSign}
             title="Income"
             value="$7,890"
-            colSpan={2}
+            className="col-span-2"
             subItems={[{ label: "Monthly", value: "$6,000" }]}
           />
           <HomeCard href="#" icon={Briefcase} title="Assets" value="$23,456" />
@@ -87,7 +92,7 @@ export function Outline() {
             icon={Briefcase}
             title="Goals"
             value="$10,000"
-            colSpan={3}
+            className="col-span-3"
           />
         </div>
       </main>
