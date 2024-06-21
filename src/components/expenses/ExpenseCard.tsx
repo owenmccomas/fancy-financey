@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Expense } from "@prisma/client";
+import type { Expense } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -126,7 +126,7 @@ export default function ExpenseCard({
             <Input
               {...register("description")}
               placeholder="Description (optional)"
-              defaultValue={expense.description || ""}
+              defaultValue={expense.description ?? ""}
               className="mb-4"
             />
             <Button className="w-full" type="submit">

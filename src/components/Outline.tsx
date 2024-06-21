@@ -7,7 +7,6 @@ import {
   PiggyBank,
   TrendingUp,
   Calendar,
-  BarChart,
   DollarSign,
   Briefcase,
 } from "lucide-react";

@@ -126,7 +126,7 @@ export const expensesRouter = createTRPCRouter({
           },
         });
 
-        return result._sum.amount || 0;
+        return result._sum.amount ?? 0;
       } catch (error) {
         console.error("Error in expenses.getTotalExpenses:", error);
         throw new TRPCError({

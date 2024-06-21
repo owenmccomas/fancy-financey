@@ -22,8 +22,8 @@ export default function Expenses() {
   const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
 
   const addExpenseMutation = api.expenses.create.useMutation({
-    onSuccess: () => {
-      refetchExpenses();
+    onSuccess: async () => {
+      await refetchExpenses();
       setIsDrawerOpen(false);
       toast({
         title: "Expense added",
@@ -40,8 +40,8 @@ export default function Expenses() {
   });
 
   const updateExpenseMutation = api.expenses.update.useMutation({
-    onSuccess: () => {
-      refetchExpenses();
+    onSuccess: async () => {
+      await refetchExpenses();
       toast({
         title: "Expense updated",
         description: "Your expense has been updated successfully.",
@@ -57,8 +57,8 @@ export default function Expenses() {
   });
 
   const deleteExpenseMutation = api.expenses.delete.useMutation({
-    onSuccess: () => {
-      refetchExpenses();
+    onSuccess: async () => {
+      await refetchExpenses();
       toast({
         title: "Expense deleted",
         description: "Your expense has been deleted successfully.",
