@@ -27,7 +27,7 @@ export function HomeCard({
 }: HomeCardProps) {
   return (
     <Card
-      className={`bg-gradient-to-br from-white to-slate-50 pt-4 transition hover:scale-105 hover:shadow-md ${className}`}
+      className={`bg-gradient-to-br from-white to-indigo-50 pt-4 transition hover:scale-105 hover:shadow-md ${className}`}
     >
       <Link href={href}>
         <CardContent className="flex flex-col items-start justify-center gap-4">
@@ -40,7 +40,7 @@ export function HomeCard({
               <p className="text-gray-500 dark:text-gray-400">{title}</p>
             </div>
             {subItems && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 text-right">
                 {subItems.map((item, index) => (
                   <div key={index}>
                     <p className="text-gray-500 dark:text-gray-400">

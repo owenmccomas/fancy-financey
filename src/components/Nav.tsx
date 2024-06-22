@@ -41,12 +41,7 @@ const navItems = [
       label: "Bills",
     },
     {
-      href: "#",
-      icon: <BarChartIcon className="h-7 w-7" />,
-      label: "Budgeting",
-    },
-    {
-      href: "#",
+      href: "/income",
       icon: <DollarSignIcon className="h-7 w-7" />,
       label: "Income",
     },

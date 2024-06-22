@@ -56,7 +56,7 @@ export default function InvestmentsTracker() {
   };
 
   return (
-    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-50 md:grid-cols-[1fr_300px]">
+    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-teal-50 md:grid-cols-[1fr_300px]">
       <main className="mx-auto ml-80 flex w-full flex-col justify-center gap-8 pl-20">
         <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
           ${investmentsAmount?.toFixed(2) ?? "0.00"}
@@ -64,7 +64,7 @@ export default function InvestmentsTracker() {
         <div className="ml-2 text-gray-500 dark:text-gray-400">
           Current Investments
         </div>
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-gradient-to-br from-white to-teal-50 transition hover:shadow-md">
           <CardHeader>
             <CardTitle>Investments Tracker</CardTitle>
           </CardHeader>
