@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
-import ExpenseCard from "@/components/expenses/ExpenseCard";
-import ExpensesForm from "@/components/expenses/ExpensesForm";
+import IncomeCard from "@/components/income/IncomeCard";
+import IncomeForm from "@/components/income/IncomeForm";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,118 +13,116 @@ import {
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function Expenses() {
+export default function IncomeTracker() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: expenses, refetch: refetchExpenses } =
-    api.expenses.getAll.useQuery();
-  const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
+  const { data: incomes, refetch: refetchIncomes } = api.income.getAll.useQuery();
+  const { data: totalIncome } = api.income.getTotalIncome.useQuery();
 
-  const addExpenseMutation = api.expenses.create.useMutation({
+  const addIncomeMutation = api.income.create.useMutation({
     onSuccess: async () => {
-      await refetchExpenses();
+      await refetchIncomes();
       setIsDrawerOpen(false);
       toast({
-        title: "Expense added",
-        description: "Your new expense has been added successfully.",
+        title: "Income added",
+        description: "Your new income has been added successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: `Failed to add expense: ${error.message}`,
+        description: `Failed to add income: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
-  const updateExpenseMutation = api.expenses.update.useMutation({
+  const updateIncomeMutation = api.income.update.useMutation({
     onSuccess: async () => {
-      await refetchExpenses();
+      await refetchIncomes();
       toast({
-        title: "Expense updated",
-        description: "Your expense has been updated successfully.",
+        title: "Income updated",
+        description: "Your income has been updated successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: `Failed to update expense: ${error.message}`,
+        description: `Failed to update income: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
-  const deleteExpenseMutation = api.expenses.delete.useMutation({
+  const deleteIncomeMutation = api.income.delete.useMutation({
     onSuccess: async () => {
-      await refetchExpenses();
+      await refetchIncomes();
       toast({
-        title: "Expense deleted",
-        description: "Your expense has been deleted successfully.",
+        title: "Income deleted",
+        description: "Your income has been deleted successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: `Failed to delete expense: ${error.message}`,
+        description: `Failed to delete income: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
-  const addExpense = (newExpense: {
-    title: string;
+  const addIncome = (newIncome: {
     amount: number;
     date: string;
-    category: string;
+    source: string;
     description?: string;
   }) => {
-    addExpenseMutation.mutate({
-      ...newExpense,
-      date: new Date(newExpense.date),
+    addIncomeMutation.mutate({
+      ...newIncome,
+      date: new Date(newIncome.date),
     });
   };
 
-  const updateExpense = (updatedExpense: {
+  const updateIncome = (updatedIncome: {
     id: number;
     amount?: number;
     date?: Date;
-    category?: string;
+    source?: string;
     description?: string | null;
   }) => {
-    updateExpenseMutation.mutate(updatedExpense);
+    updateIncomeMutation.mutate(updatedIncome);
   };
 
-  const deleteExpense = (id: number) => {
-    deleteExpenseMutation.mutate({ id });
+  const deleteIncome = (id: number) => {
+    deleteIncomeMutation.mutate({ id });
   };
 
   return (
-    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-100 md:grid-cols-[1fr_300px]">
+    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-green-50 md:grid-cols-[1fr_300px]">
       <main className="ml-80 flex w-full flex-col items-start justify-center gap-8 pr-80">
         <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-          ${totalExpenses?.toFixed(2) ?? "0.00"}
+          ${totalIncome?.toFixed(2) ?? "0.00"}
         </div>
         <div className="ml-2 text-gray-500 dark:text-gray-400">
-          Total Expenses
+          Total Income
         </div>
         <div className="flex w-full flex-row flex-wrap items-start gap-4">
-          {expenses?.map((expense) => (
-            <ExpenseCard
-              key={expense.id}
-              expense={expense}
-              onUpdate={updateExpense}
-              onDelete={deleteExpense}
+          {incomes?.map((income) => (
+            <IncomeCard
+              key={income.id}
+              income={income}
+              onUpdate={updateIncome}
+              onDelete={deleteIncome}
             />
           ))}
         </div>
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerTrigger asChild>
-            <Button onClick={() => setIsDrawerOpen(true)}>Add Expense</Button>
+            <Button onClick={() => setIsDrawerOpen(true)}>Add Income</Button>
           </DrawerTrigger>
           <DrawerContent>
-            <ExpensesForm onAddExpense={addExpense} />
+            <IncomeForm onAddIncome={addIncome} />
             <DrawerFooter>
               <DrawerClose asChild>
                 <Button

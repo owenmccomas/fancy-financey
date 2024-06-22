@@ -11,49 +11,43 @@ import {
 } from "@/components/ui/select";
 import * as LucideIcons from "lucide-react";
 
-interface ExpenseFormData {
-  title: string;
+interface IncomeFormData {
   amount: number;
   date: string;
-  category: string;
   description?: string;
+  source: string;
 }
 
-interface ExpensesFormProps {
-  onAddExpense: (newExpense: ExpenseFormData) => void;
+interface IncomeFormProps {
+  onAddIncome: (newIncome: IncomeFormData) => void;
 }
 
-const iconOptions = [
-  { value: "Home", label: "Housing" },
-  { value: "Car", label: "Auto" },
-  { value: "ShoppingCart", label: "Shopping" },
-  { value: "Utensils", label: "Food" },
-  { value: "Briefcase", label: "Work" },
-  { value: "HeartPulse", label: "Health" },
-  { value: "Plane", label: "Travel" },
-  { value: "Tv", label: "Entertainment" },
-  { value: "GraduationCap", label: "Education" },
-  { value: "Plus", label: "Other" },
+const sourceOptions = [
+  { value: "Salary", label: "Salary" },
+  { value: "Freelance", label: "Freelance" },
+  { value: "Investment", label: "Investment" },
+  { value: "Rental", label: "Rental" },
+  { value: "Other", label: "Other" },
 ];
 
-export default function ExpensesForm({ onAddExpense }: ExpensesFormProps) {
+export default function IncomeForm({ onAddIncome }: IncomeFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ExpenseFormData>();
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  } = useForm<IncomeFormData>();
+  const [selectedSource, setSelectedSource] = useState<string>("");
 
-  const onSubmit = (data: ExpenseFormData) => {
-    onAddExpense({
+  const onSubmit = (data: IncomeFormData) => {
+    onAddIncome({
       ...data,
-      category: selectedCategory,
+      source: selectedSource,
       amount: Number(data.amount),
-      date: Date(),
+      date: new Date().toISOString(),
     });
     reset();
-    setSelectedCategory("");
+    setSelectedSource("");
   };
 
   return (
@@ -62,26 +56,7 @@ export default function ExpensesForm({ onAddExpense }: ExpensesFormProps) {
       className="mx-auto min-w-[600px] max-w-[800px] space-y-4 px-4 py-10 sm:px-6 lg:px-8"
     >
       <div>
-        <label className="block text-sm font-medium text-gray-700">Title</label>
-        <Input
-          id="title"
-          {...register("title", {
-            required: "Title is required",
-            min: { value: 1, message: "Title is required" },
-          })}
-          placeholder={`"Auto", "Rent", "Groceries", etc.`}
-        />
-        {errors.amount && (
-          <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
-        )}
-      </div>
-      <div>
-        <label
-          htmlFor="amount"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Amount
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Amount</label>
         <Input
           id="amount"
           type="number"
@@ -96,25 +71,20 @@ export default function ExpensesForm({ onAddExpense }: ExpensesFormProps) {
           <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
         )}
       </div>
-      <div>
-        {errors.date && (
-          <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
-        )}
-      </div>
 
       <div>
         <label
-          htmlFor="category"
+          htmlFor="source"
           className="block text-sm font-medium text-gray-700"
         >
-          Category
+          Source
         </label>
-        <Select onValueChange={setSelectedCategory} value={selectedCategory}>
-          <SelectTrigger id="category">
-            <SelectValue placeholder="Select a category" />
+        <Select onValueChange={setSelectedSource} value={selectedSource}>
+          <SelectTrigger id="source">
+            <SelectValue placeholder="Select an income source" />
           </SelectTrigger>
           <SelectContent>
-            {iconOptions.map((option) => {
+            {sourceOptions.map((option) => {
               const IconComponent = LucideIcons[
                 option.value as keyof typeof LucideIcons
               ] as React.ElementType;
@@ -150,9 +120,9 @@ export default function ExpensesForm({ onAddExpense }: ExpensesFormProps) {
       <Button
         type="submit"
         className="w-full"
-        disabled={selectedCategory === ""}
+        disabled={selectedSource === ""}
       >
-        Add Expense
+        Add Income
       </Button>
     </form>
   );

@@ -1,58 +1,75 @@
 import { useSession } from "next-auth/react";
 import Nav from "../components/Nav";
 import { HomeCard } from "@/components/HomeCard";
+import { api } from "@/utils/api";
 import {
   Wallet,
   PiggyBank,
   TrendingUp,
   Calendar,
-  BarChart,
   DollarSign,
   Briefcase,
 } from "lucide-react";
 
 export function Outline() {
   const sessionData = useSession().data;
+  const { data: savingsAmount } = api.savings.get.useQuery();
+  const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
+  const { data: topExpenses } = api.expenses.getTopExpenses.useQuery({
+    limit: 4,
+  });
+  const { data: investmentsAmount } = api.investments.get.useQuery();
+  const { data: totalIncome } = api.income.getTotalIncome.useQuery();
+  const { data: topIncomes } = api.income.getTopIncomes.useQuery({ limit: 1 });
+
+  const monthlyIncome = topIncomes?.[0]?.amount ?? 0;
+
+  const netWorth = (totalIncome ?? 0) - (totalExpenses ?? 0) + (savingsAmount ?? 0) + (investmentsAmount ?? 0);
 
   return (
-    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-50 md:grid-cols-[1fr_300px]">
+    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-100 md:grid-cols-[1fr_300px]">
       <main className="ml-80 flex w-full flex-col items-start justify-center gap-8 pr-80">
         <div className="flex w-full flex-col items-start justify-center gap-4">
           <p className="text-3xl text-gray-700 dark:text-gray-400">
             Hey, {sessionData?.user?.name?.split(" ")[0]}!
           </p>
           <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-            $89,432
+            ${netWorth.toFixed(2)}
           </div>
           <p className="text-gray-500 dark:text-gray-400">Current Net Worth</p>
         </div>
-        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid w-full grid-cols-3 gap-4">
           <HomeCard
             href="/expenses"
             icon={Wallet}
             title="Expenses"
-            value="$12,345"
-            colSpan={2}
-            subItems={[
-              { label: "Rent", value: "$1,500" },
-              { label: "Auto", value: "$350" },
-              { label: "Utilities", value: "$200" },
-              { label: "Groceries", value: "$500" },
-            ]}
+            value={`$${totalExpenses?.toFixed(2) ?? "---.--"}`}
+            className="col-span-2"
+            subItems={
+              topExpenses?.map((expense) => ({
+                label: expense.title,
+                value: `$${expense.amount.toFixed(2) ?? "--.--"}`,
+              })) ?? []
+            }
           />
-          <HomeCard href="#" icon={PiggyBank} title="Savings" value="$8,901" />
           <HomeCard
-            href="#"
+            href="/savings"
+            icon={PiggyBank}
+            title="Savings"
+            value={savingsAmount?.toFixed(2) ?? "---.--"}
+          />
+          <HomeCard
+            href="/investments"
             icon={TrendingUp}
             title="Investments"
-            value="$45,678"
+            value={investmentsAmount?.toFixed(2) ?? "---.--"}
           />
           <HomeCard
             href="#"
             icon={Calendar}
             title="Bills"
             value="$2,345"
-            colSpan={2}
+            className="col-span-2"
             subItems={[
               { label: "Electricity", value: "$150" },
               { label: "Water", value: "$75" },
@@ -61,25 +78,15 @@ export function Outline() {
             ]}
           />
           <HomeCard
-            href="#"
-            icon={BarChart}
-            title="Budgeting"
-            value="$3,456"
-            colSpan={3}
-            subItems={[
-              { label: "Food", value: "$1,000" },
-              { label: "Entertainment", value: "$500" },
-              { label: "Misc", value: "$500" },
-              { label: "Savings", value: "$1,456" },
-            ]}
-          />
-          <HomeCard
-            href="#"
+            href="/income"
             icon={DollarSign}
             title="Income"
-            value="$7,890"
-            colSpan={2}
-            subItems={[{ label: "Monthly", value: "$6,000" }]}
+            value={`$${totalIncome?.toFixed(2) ?? "---.--"}`}
+            className="col-span-2"
+            subItems={topIncomes?.map((income) => ({
+              label: income.source,
+              value: `$${income.amount.toFixed(2) ?? "--.--"}`,
+            }))}
           />
           <HomeCard href="#" icon={Briefcase} title="Assets" value="$23,456" />
           <HomeCard
@@ -87,7 +94,7 @@ export function Outline() {
             icon={Briefcase}
             title="Goals"
             value="$10,000"
-            colSpan={3}
+            className="col-span-3"
           />
         </div>
       </main>
