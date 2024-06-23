@@ -20,11 +20,23 @@ export function Outline() {
   });
   const { data: investmentsAmount } = api.investments.get.useQuery();
   const { data: totalIncome } = api.income.getTotalIncome.useQuery();
-  const { data: topIncomes } = api.income.getTopIncomes.useQuery({ limit: 1 });
+  const { data: topIncomes } = api.income.getTopIncomes.useQuery({ limit: 4 });
+  const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
 
-  const monthlyIncome = topIncomes?.[0]?.amount ?? 0;
+  const netWorth =
+    (totalIncome ?? 0) -
+    (totalExpenses ?? 0) +
+    (savingsAmount ?? 0) +
+    (totalAssetValue ?? 0) +
+    (investmentsAmount ?? 0);
 
-  const netWorth = (totalIncome ?? 0) - (totalExpenses ?? 0) + (savingsAmount ?? 0) + (investmentsAmount ?? 0);
+    const formatValue = (value: number | null | undefined) => {
+      if (value === undefined || value === null) return "---.--";
+      const formattedValue = value.toFixed(2);
+      return formattedValue.endsWith('.00') 
+        ? `$${parseInt(formattedValue)}` 
+        : `$${formattedValue}`;
+    };
 
   return (
     <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-100 md:grid-cols-[1fr_300px]">
@@ -34,7 +46,9 @@ export function Outline() {
             Hey, {sessionData?.user?.name?.split(" ")[0]}!
           </p>
           <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-            ${netWorth.toFixed(2)}
+            {netWorth !== undefined && netWorth !== null
+              ? `$${netWorth.toFixed(2)}`
+              : "---.--"}
           </div>
           <p className="text-gray-500 dark:text-gray-400">Current Net Worth</p>
         </div>
@@ -43,12 +57,12 @@ export function Outline() {
             href="/expenses"
             icon={Wallet}
             title="Expenses"
-            value={`$${totalExpenses?.toFixed(2) ?? "---.--"}`}
+            value={formatValue(totalExpenses)}
             className="col-span-2"
             subItems={
               topExpenses?.map((expense) => ({
                 label: expense.title,
-                value: `$${expense.amount.toFixed(2) ?? "--.--"}`,
+                value: formatValue(expense.amount),
               })) ?? []
             }
           />
@@ -56,13 +70,13 @@ export function Outline() {
             href="/savings"
             icon={PiggyBank}
             title="Savings"
-            value={savingsAmount?.toFixed(2) ?? "---.--"}
+            value={formatValue(savingsAmount)}
           />
           <HomeCard
             href="/investments"
             icon={TrendingUp}
             title="Investments"
-            value={investmentsAmount?.toFixed(2) ?? "---.--"}
+            value={formatValue(investmentsAmount)}
           />
           <HomeCard
             href="#"
@@ -81,14 +95,21 @@ export function Outline() {
             href="/income"
             icon={DollarSign}
             title="Income"
-            value={`$${totalIncome?.toFixed(2) ?? "---.--"}`}
+            value={formatValue(totalIncome)}
             className="col-span-2"
-            subItems={topIncomes?.map((income) => ({
-              label: income.source,
-              value: `$${income.amount.toFixed(2) ?? "--.--"}`,
-            }))}
+            subItems={
+              topIncomes?.map((income) => ({
+                label: income.source,
+                value: formatValue(income.amount),
+              })) ?? []
+            }
           />
-          <HomeCard href="#" icon={Briefcase} title="Assets" value="$23,456" />
+          <HomeCard
+            href="/assets"
+            icon={Briefcase}
+            title="Assets"
+            value={formatValue(totalAssetValue)}
+          />
           <HomeCard
             href="#"
             icon={Briefcase}

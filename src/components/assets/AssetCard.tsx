@@ -1,11 +1,10 @@
 import { useState } from "react";
-import type { Expense } from "@prisma/client";
+import type { Asset } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,58 +24,58 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-interface ExpenseCardProps {
-  expense: Expense;
-  onUpdate: (updatedExpense: Partial<Expense> & { id: number }) => void;
+interface AssetCardProps {
+  asset: Asset;
+  onUpdate: (updatedAsset: Partial<Asset> & { id: number }) => void;
   onDelete: (id: number) => void;
 }
 
-export default function ExpenseCard({
-  expense,
+export default function AssetCard({
+  asset,
   onUpdate,
   onDelete,
-}: ExpenseCardProps) {
+}: AssetCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Partial<Expense>>();
+  } = useForm<Partial<Asset>>();
 
-  const onSubmit = (values: Partial<Expense>) => {
+  const onSubmit = (values: Partial<Asset>) => {
     const updatedValues = {
       ...values,
       date: values.date ? new Date(values.date) : undefined,
     };
-    onUpdate({ id: expense.id, ...updatedValues });
+    onUpdate({ id: asset.id, ...updatedValues });
     setIsOpen(false);
   };
 
   const IconComponent =
     (LucideIcons[
-      expense.category as keyof typeof LucideIcons
-    ] as React.ElementType) || LucideIcons.CreditCard;
+      asset.category as keyof typeof LucideIcons
+    ] as React.ElementType) || LucideIcons.Package;
 
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Card className="w-64 h-40 cursor-pointer bg-gradient-to-br from-white to-indigo-50 transition hover:scale-105 hover:shadow-md">
+          <Card className="w-64 h-40 cursor-pointer bg-gradient-to-br from-orange-50 to-amber-50 transition hover:scale-105 hover:shadow-md">
             <CardContent className="flex flex-col h-full justify-between p-4">
               <div className="flex items-center justify-between">
                 <div className="rounded-full bg-indigo-50 p-3">
                   <IconComponent size={24} className="text-indigo-600" />
                 </div>
                 <p className="text-sm text-gray-500">
-                  {new Date(expense.date).toLocaleDateString()}
+                  {new Date(asset.date).toLocaleDateString()}
                 </p>
               </div>
               <div className="mt-2">
                 <p className="text-lg font-semibold text-gray-700 line-clamp-2">
-                  {expense.title}
+                  {asset.name}
                 </p>
                 <div className="text-2xl font-bold text-gray-900 mt-1">
-                  ${expense.amount.toLocaleString()}
+                  ${asset.value.toLocaleString()}
                 </div>
               </div>
             </CardContent>
@@ -84,38 +83,36 @@ export default function ExpenseCard({
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit {expense.title} Expense</DialogTitle>
-            <DialogDescription>
-              Update your {expense.category.toLowerCase()} expense here.
-            </DialogDescription>
+            <DialogTitle>Edit {asset.name} Asset</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
-              {...register("amount", {
+              {...register("name", { required: "Name is required" })}
+              placeholder="Asset Name"
+              defaultValue={asset.name}
+              className="mb-4"
+            />
+            {errors.name && (
+              <p className="mb-4 mt-2 text-red-500">{errors.name.message}</p>
+            )}
+            <Input
+              {...register("value", {
                 valueAsNumber: true,
-                required: "Amount is required",
-                min: { value: 0.01, message: "Amount must be greater than 0" },
-                max: {
-                  value: 999999,
-                  message:
-                    "Amount must be less than 6 figures, if you need more than that, you are proably using the wrong app my friend",
-                },
+                required: "Value is required",
+                min: { value: 0.01, message: "Value must be greater than 0" },
               })}
               type="number"
               step={0.01}
-              placeholder={`Current: $${expense.amount}`}
+              placeholder={`Current: $${asset.value}`}
               className="mb-4"
             />
-            {errors.amount && (
-              <p className="mb-4 mt-2 text-red-500">{errors.amount.message}</p>
-            )}
-            {errors.date && (
-              <p className="mb-4 mt-2 text-red-500">{errors.date.message}</p>
+            {errors.value && (
+              <p className="mb-4 mt-2 text-red-500">{errors.value.message}</p>
             )}
             <Input
               {...register("category", { required: "Category is required" })}
               placeholder="Category"
-              defaultValue={expense.category}
+              defaultValue={asset.category}
               className="mb-4"
             />
             {errors.category && (
@@ -126,7 +123,7 @@ export default function ExpenseCard({
             <Input
               {...register("description")}
               placeholder="Description (optional)"
-              defaultValue={expense.description ?? ""}
+              defaultValue={asset.description ?? ""}
               className="mb-4"
             />
             <Button className="w-full" type="submit">
@@ -144,12 +141,12 @@ export default function ExpenseCard({
                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  this expense.
+                  this asset.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => onDelete(expense.id)}>
+                <AlertDialogAction onClick={() => onDelete(asset.id)}>
                   Delete
                 </AlertDialogAction>
               </AlertDialogFooter>

@@ -61,22 +61,22 @@ export default function IncomeCard({
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Card className="w-64 cursor-pointer bg-gradient-to-br from-white to-green-50 pt-4 transition hover:scale-105 hover:shadow-md">
-            <CardContent className="flex flex-col items-center justify-center gap-4">
-              <div className="flex w-full flex-row items-center justify-between">
-                <div className="mr-4 rounded-full bg-green-50 p-3">
-                  <IconComponent size={32} className="text-green-600" />
+          <Card className="w-64 h-40 cursor-pointer bg-gradient-to-br from-white to-green-50 transition hover:scale-105 hover:shadow-md">
+            <CardContent className="flex flex-col h-full justify-between p-4">
+              <div className="flex items-center justify-between">
+                <div className="rounded-full bg-green-50 p-3">
+                  <IconComponent size={24} className="text-green-600" />
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <p className="mb-2 text-xl font-semibold text-gray-700">
-                    {income.source}
-                  </p>
-                  <div className="text-3xl font-bold text-gray-900">
-                    ${income.amount.toLocaleString()}
-                  </div>
-                  <p className="mt-2 text-sm text-gray-500">
-                    {new Date(income.date).toLocaleDateString()}
-                  </p>
+                <p className="text-sm text-gray-500">
+                  {new Date(income.date).toLocaleDateString()}
+                </p>
+              </div>
+              <div className="mt-2">
+                <p className="text-lg font-semibold text-gray-700 line-clamp-2">
+                  {income.source}
+                </p>
+                <div className="text-2xl font-bold text-gray-900 mt-1">
+                  ${income.amount.toLocaleString()}
                 </div>
               </div>
             </CardContent>

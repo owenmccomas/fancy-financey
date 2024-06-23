@@ -15,7 +15,7 @@ export default function SavingsTracker() {
   const { data: savingsAmount, refetch: refetchSavings } =
     api.savings.get.useQuery();
   const { mutate: updateSavings } = api.savings.update.useMutation({
-    onSuccess: async() => {
+    onSuccess: async () => {
       console.log("Savings updated successfully");
       await refetchSavings();
     },
@@ -54,7 +54,13 @@ export default function SavingsTracker() {
     <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-purple-100 md:grid-cols-[1fr_300px]">
       <main className="mx-auto ml-80 flex w-full flex-col justify-center gap-8 pl-20">
         <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-          ${savingsAmount?.toFixed(2) ?? "0.00"}
+          {savingsAmount !== undefined ? (
+            <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
+              {`$${savingsAmount?.toFixed(2)}`}
+            </div>
+          ) : (
+            <div>Loading...</div>
+          )}
         </div>
         <div className="ml-2 text-gray-500 dark:text-gray-400">
           Current Savings

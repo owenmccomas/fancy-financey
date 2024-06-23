@@ -22,6 +22,7 @@ model User {
   savings       Savings?
   savingsGoals  SavingsGoal[]
   sessions      Session[]
+  assets        Asset[]
 }
 
 model Account {
@@ -128,4 +129,17 @@ model Investment {
   createdAt      DateTime @default(now())
 
   @@index([type])
+}
+
+model Asset {
+  id          Int      @id @default(autoincrement())
+  name        String
+  value       Float
+  date        DateTime
+  category    String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([category])
 }

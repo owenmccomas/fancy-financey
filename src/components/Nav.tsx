@@ -36,7 +36,7 @@ const navItems = [
       label: "Investments",
     },
     {
-      href: "#",
+      href: "/bills",
       icon: <CalendarIcon className="h-7 w-7" />,
       label: "Bills",
     },
@@ -46,18 +46,18 @@ const navItems = [
       label: "Income",
     },
     {
-      href: "#",
+      href: "/assets",
       icon: <BriefcaseIcon className="h-7 w-7" />,
       label: "Assets",
     },
     {
-      href: "#",
+      href: "/account",
       icon: <UserIcon className="h-7 w-7" />,
       label: "Account",
       onClick: () => signOut(),
     },
     {
-      href: "#",
+      href: "/settings",
       icon: <SettingsIcon className="h-7 w-7" />,
       label: "Settings",
     },

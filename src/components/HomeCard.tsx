@@ -40,15 +40,19 @@ export function HomeCard({
               <p className="text-gray-500 dark:text-gray-400">{title}</p>
             </div>
             {subItems && (
-              <div className="grid grid-cols-2 gap-4 text-right">
-                {subItems.map((item, index) => (
-                  <div key={index}>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      {item.label}
-                    </p>
-                    <div className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-                      {item.value}
-                    </div>
+              <div className="grid grid-cols-2 gap-4 justify-items-end">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="text-right">
+                    {subItems[3 - index] && (
+                      <>
+                        <p className="text-gray-500 dark:text-gray-400">
+                          {subItems[3 - index]?.label}
+                        </p>
+                        <div className="text-2xl font-bold text-gray-900 dark:text-gray-50">
+                          {subItems[3 - index]?.value}
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>

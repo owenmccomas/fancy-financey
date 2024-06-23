@@ -102,7 +102,13 @@ export default function IncomeTracker() {
     <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-green-50 md:grid-cols-[1fr_300px]">
       <main className="ml-80 flex w-full flex-col items-start justify-center gap-8 pr-80">
         <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-          ${totalIncome?.toFixed(2) ?? "0.00"}
+        {totalIncome !== undefined ? (
+            <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
+              {`$${totalIncome?.toFixed(2)}`}
+            </div>
+          ) : (
+            <div>Loading...</div>
+          )}
         </div>
         <div className="ml-2 text-gray-500 dark:text-gray-400">
           Total Income
