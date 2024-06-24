@@ -23,6 +23,7 @@ model User {
   savingsGoals  SavingsGoal[]
   sessions      Session[]
   assets        Asset[]
+  bills         Bill[]
 }
 
 model Account {
@@ -136,6 +137,19 @@ model Asset {
   name        String
   value       Float
   date        DateTime
+  category    String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([category])
+}
+
+model Bill {
+  id          Int      @id @default(autoincrement())
+  title       String
+  amount      Float
+  dueDate     DateTime
   category    String
   description String?
   userId      String

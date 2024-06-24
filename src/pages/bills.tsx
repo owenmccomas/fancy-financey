@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
-import AssetCard from "@/components/assets/AssetCard";
-import AssetsForm from "@/components/assets/AssetsForm";
+import BillCard from "../components/Bills/BillCard";
+import BillsForm from "../components/Bills/BillsForm";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,122 +13,121 @@ import {
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function Assets() {
+export default function Bills() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: assets, refetch: refetchAssets } = api.assets.getAll.useQuery();
-  const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
+  const { data: bills, refetch: refetchBills } = api.bills.getAll.useQuery();
+  const { data: totalBills } = api.bills.getTotalBills.useQuery();
 
-  const addAssetMutation = api.assets.create.useMutation({
+  const addBillMutation = api.bills.create.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await refetchBills();
       setIsDrawerOpen(false);
       toast({
-        title: "Asset added",
-        description: "Your new asset has been added successfully.",
+        title: "Bill added",
+        description: "Your new bill has been added successfully.",
       });
     },
     onError: () => {
       toast({
         title: "Error",
-        description: `Failed to add asset`,
+        description: `Failed to add bill`,
         variant: "destructive",
       });
     },
   });
 
-  const updateAssetMutation = api.assets.update.useMutation({
+  const updateBillMutation = api.bills.update.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await refetchBills();
       toast({
-        title: "Asset updated",
-        description: "Your asset has been updated successfully.",
+        title: "Bill updated",
+        description: "Your bill has been updated successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: `Failed to update asset: ${error.message}`,
+        description: `Failed to update bill: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
-  const deleteAssetMutation = api.assets.delete.useMutation({
+  const deleteBillMutation = api.bills.delete.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await refetchBills();
       toast({
-        title: "Asset deleted",
-        description: "Your asset has been deleted successfully.",
+        title: "Bill deleted",
+        description: "Your bill has been deleted successfully.",
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
-        description: `Failed to delete asset: ${error.message}`,
+        description: `Failed to delete bill`,
         variant: "destructive",
       });
     },
   });
 
-  const addAsset = (newAsset: {
-    name: string;
-    value: number;
-    date: string;
+  const addBill = (newBill: {
+    title: string;
+    amount: number;
+    dueDate: string;
     category: string;
     description?: string;
   }) => {
-    addAssetMutation.mutate({
-      ...newAsset,
-      date: new Date(newAsset.date),
+    addBillMutation.mutate({
+      ...newBill,
+      dueDate: new Date(newBill.dueDate),
     });
   };
 
-  const updateAsset = (updatedAsset: {
+  const updateBill = (updatedBill: {
     id: number;
-    name?: string;
-    value?: number;
-    date?: Date;
+    amount?: number;
+    dueDate?: Date;
     category?: string;
     description?: string | null;
   }) => {
-    updateAssetMutation.mutate(updatedAsset);
+    updateBillMutation.mutate(updatedBill);
   };
 
-  const deleteAsset = (id: number) => {
-    deleteAssetMutation.mutate({ id });
+  const deleteBill = (id: number) => {
+    deleteBillMutation.mutate({ id });
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-amber-100">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-blue-100">
       <div className="grid min-h-screen w-full grid-cols-1 md:grid-cols-[1fr_300px]">
         <main className="flex w-full flex-col items-start justify-center gap-8 p-4 md:p-8 lg:pl-24 xl:pl-32">
           <div className="flex w-full flex-col items-start justify-center gap-4">
             <div className="text-6xl font-bold text-gray-900 dark:text-gray-50 md:text-8xl">
-              ${totalAssetValue?.toFixed(2) ?? "0.00"}
+              ${totalBills?.toFixed(2) ?? "0.00"}
             </div>
             <div className="ml-2 text-gray-500 dark:text-gray-400">
-              Total Asset Value
+              Total Bills
             </div>
           </div>
           <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-            {assets?.map((asset) => (
-              <div key={asset.id} style={{ padding: '5px' }}>
-                <AssetCard
-                  asset={asset}
-                  onUpdate={updateAsset}
-                  onDelete={deleteAsset}
+            {bills?.map((bill) => (
+              <div key={bill.id} style={{ padding: '5px' }}>
+                <BillCard
+                  bill={bill}
+                  onUpdate={updateBill}
+                  onDelete={deleteBill}
                 />
               </div>
             ))}
           </div>
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
-              <Button onClick={() => setIsDrawerOpen(true)}>Add Asset</Button>
+              <Button onClick={() => setIsDrawerOpen(true)}>Add Bill</Button>
             </DrawerTrigger>
             <DrawerContent>
-              <AssetsForm onAddAsset={addAsset} />
+              <BillsForm onAddBill={addBill} />
               <DrawerFooter>
                 <DrawerClose asChild>
                   <Button
