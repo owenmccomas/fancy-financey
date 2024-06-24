@@ -10,7 +10,7 @@ import {
   TrendingUpIcon,
   UserIcon,
   WalletIcon,
-  BriefcaseIcon
+  BriefcaseIcon,
 } from "../lib/svgs";
 
 const navItems = [
@@ -21,9 +21,9 @@ const navItems = [
       label: "Dashboard",
     },
     {
-      href: "/expenses",
-      icon: <WalletIcon className="h-7 w-7" />,
-      label: "Expenses",
+      href: "/income",
+      icon: <DollarSignIcon className="h-7 w-7" />,
+      label: "Income",
     },
     {
       href: "/savings",
@@ -31,37 +31,42 @@ const navItems = [
       label: "Savings",
     },
     {
+      href: "/expenses",
+      icon: <WalletIcon className="h-7 w-7" />,
+      label: "Expenses",
+    },
+    {
       href: "/investments",
       icon: <TrendingUpIcon className="h-7 w-7" />,
       label: "Investments",
     },
     {
-      href: "#",
-      icon: <CalendarIcon className="h-7 w-7" />,
-      label: "Bills",
-    },
-    {
-      href: "/income",
-      icon: <DollarSignIcon className="h-7 w-7" />,
-      label: "Income",
-    },
-    {
-      href: "#",
+      href: "/assets",
       icon: <BriefcaseIcon className="h-7 w-7" />,
       label: "Assets",
     },
     {
-      href: "#",
+      href: "/bills",
+      icon: <CalendarIcon className="h-7 w-7" />,
+      label: "Bills",
+    },
+    {
+      href: "/goals",
+      icon: <BarChartIcon className="h-7 w-7" />,
+      label: "Goals",
+    },
+    {
+      href: "/account",
       icon: <UserIcon className="h-7 w-7" />,
       label: "Account",
       onClick: () => signOut(),
     },
     {
-      href: "#",
+      href: "/settings",
       icon: <SettingsIcon className="h-7 w-7" />,
       label: "Settings",
     },
-  ]
+  ],
 ].flat();
 
 export default function Nav() {
