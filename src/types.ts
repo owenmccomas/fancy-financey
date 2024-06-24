@@ -16,13 +16,11 @@ export interface NewGoalInput {
     status?: GoalStatus;
   };
   
-  // This type is used for the API input
   export type GoalApiInput = Omit<NewGoalInput, "targetDate"> & {
     targetDate: Date;
     description: string | undefined;
   };
   
-  // This type is used for internal component state
   export type GoalFormData = Omit<NewGoalInput, "description" | "targetDate"> & {
     description?: string;
     targetDate: string;
