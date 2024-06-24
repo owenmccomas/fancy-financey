@@ -24,6 +24,7 @@ model User {
   sessions      Session[]
   assets        Asset[]
   bills         Bill[]
+  goals         Goal[]
 }
 
 model Account {
@@ -156,4 +157,23 @@ model Bill {
   user        User     @relation(fields: [userId], references: [id])
 
   @@index([category])
+}
+
+model Goal {
+  id             Int       @id @default(autoincrement())
+  title          String
+  description    String?
+  targetAmount   Float
+  currentAmount  Float     @default(0)
+  targetDate     DateTime
+  category       String
+  priority       Int       @default(1)
+  status         String    @default("In Progress")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+
+  @@index([category])
+  @@index([status])
 }

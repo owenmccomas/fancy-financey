@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
-import BillCard from "../components/Bills/BillCard";
-import BillsForm from "../components/Bills/BillsForm";
+import BillCard from "../components/bills/BillCard";
+import BillsForm from "../components/bills/BillsForm";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,10 +46,10 @@ export default function Bills() {
         description: "Your bill has been updated successfully.",
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
-        description: `Failed to update bill: ${error.message}`,
+        description: `Failed to update bill`,
         variant: "destructive",
       });
     },
