@@ -24,7 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Progress } from "@/components/ui/progress";
-import { UpdateGoalInput, GoalStatus, GoalFormData } from "@/types";
+import type { UpdateGoalInput, GoalStatus, GoalFormData } from "@/types";
 
 interface GoalCardProps {
     goal: Goal;
@@ -50,7 +50,7 @@ interface GoalCardProps {
         targetDate: goal.targetDate.toISOString().split('T')[0], // Convert Date to YYYY-MM-DD string
         category: goal.category,
         priority: goal.priority,
-        description: goal.description || undefined,
+        description: goal.description ?? undefined,
       },
     });
   
@@ -60,7 +60,7 @@ interface GoalCardProps {
         ...values,
         targetDate: new Date(values.targetDate),
         status: goal.status as GoalStatus,
-        description: values.description || null,
+        description: values.description ?? null,
       };
       onUpdate(updatedValues);
       setIsOpen(false);

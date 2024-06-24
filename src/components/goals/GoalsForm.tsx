@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import * as LucideIcons from "lucide-react";
-import { NewGoalInput, GoalFormData } from "@/types";
+import type { NewGoalInput, GoalFormData } from "@/types";
 
 interface GoalsFormProps {
   onAddGoal: (newGoal: NewGoalInput) => void;
@@ -44,7 +44,7 @@ export default function GoalsForm({ onAddGoal }: GoalsFormProps) {
       targetAmount: Number(data.targetAmount),
       currentAmount: Number(data.currentAmount),
       priority: Number(data.priority),
-      description: data.description || null,
+      description: data.description ?? null,
     });
     reset();
     setSelectedCategory("");

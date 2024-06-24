@@ -12,7 +12,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
-import { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
+import type { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
 
 export default function Goals() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -106,7 +106,7 @@ export default function Goals() {
             </div>
           </div>
           <div className="flex flex-wrap" style={{ margin: "-5px" }}>
-            {goals?.map((goal: any) => (
+            {goals?.map((goal) => (
               <div key={goal.id} style={{ padding: "5px" }}>
                 <GoalCard
                   goal={goal}

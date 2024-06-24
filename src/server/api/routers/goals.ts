@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { GoalStatus } from "@/types";
+import type { GoalStatus } from "@/types";
 
 export const goalsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
