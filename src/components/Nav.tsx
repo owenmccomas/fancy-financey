@@ -21,9 +21,9 @@ const navItems = [
       label: "Dashboard",
     },
     {
-      href: "/expenses",
-      icon: <WalletIcon className="h-7 w-7" />,
-      label: "Expenses",
+      href: "/income",
+      icon: <DollarSignIcon className="h-7 w-7" />,
+      label: "Income",
     },
     {
       href: "/savings",
@@ -31,9 +31,19 @@ const navItems = [
       label: "Savings",
     },
     {
+      href: "/expenses",
+      icon: <WalletIcon className="h-7 w-7" />,
+      label: "Expenses",
+    },
+    {
       href: "/investments",
       icon: <TrendingUpIcon className="h-7 w-7" />,
       label: "Investments",
+    },
+    {
+      href: "/assets",
+      icon: <BriefcaseIcon className="h-7 w-7" />,
+      label: "Assets",
     },
     {
       href: "/bills",
@@ -41,14 +51,9 @@ const navItems = [
       label: "Bills",
     },
     {
-      href: "/income",
-      icon: <DollarSignIcon className="h-7 w-7" />,
-      label: "Income",
-    },
-    {
-      href: "/assets",
-      icon: <BriefcaseIcon className="h-7 w-7" />,
-      label: "Assets",
+      href: "/goals",
+      icon: <BarChartIcon className="h-7 w-7" />,
+      label: "Goals",
     },
     {
       href: "/account",
@@ -64,7 +69,11 @@ const navItems = [
   ]
 ].flat();
 
-export default function Nav() {
+interface NavProps {
+  className?: string
+}
+
+export default function Nav({ className = "" }: NavProps) {
   return (
     <aside className="group fixed right-0 top-1/2 hidden w-20 -translate-y-1/2 transition-all duration-500 ease-in-out hover:w-64 md:flex">
       <div className="flex-1 overflow-auto py-2">

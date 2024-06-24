@@ -101,45 +101,50 @@ export default function Assets() {
   };
 
   return (
-    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-amber-100 md:grid-cols-[1fr_300px]">
-      <main className="ml-80 flex w-full flex-col items-start justify-center gap-8 pr-80">
-        <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-          ${totalAssetValue?.toFixed(2) ?? "0.00"}
-        </div>
-        <div className="ml-2 text-gray-500 dark:text-gray-400">
-          Total Asset Value
-        </div>
-        <div className="flex w-full flex-row flex-wrap items-start gap-4">
-          {assets?.map((asset) => (
-            <AssetCard
-              key={asset.id}
-              asset={asset}
-              onUpdate={updateAsset}
-              onDelete={deleteAsset}
-            />
-          ))}
-        </div>
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerTrigger asChild>
-            <Button onClick={() => setIsDrawerOpen(true)}>Add Asset</Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <AssetsForm onAddAsset={addAsset} />
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button
-                  className="mx-auto min-w-[540px] max-w-[800px]"
-                  variant="outline"
-                  onClick={() => setIsDrawerOpen(false)}
-                >
-                  Cancel
-                </Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-amber-100">
+      <div className="grid min-h-screen w-full grid-cols-1 md:grid-cols-[1fr_300px]">
+        <main className="flex w-full flex-col items-start justify-center gap-8 p-4 md:p-8 lg:pl-24 xl:pl-32">
+          <div className="flex w-full flex-col items-start justify-center gap-4">
+            <div className="text-6xl font-bold text-gray-900 dark:text-gray-50 md:text-8xl">
+              ${totalAssetValue?.toFixed(2) ?? "0.00"}
+            </div>
+            <div className="ml-2 text-gray-500 dark:text-gray-400">
+              Total Asset Value
+            </div>
+          </div>
+          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
+            {assets?.map((asset) => (
+              <div key={asset.id} style={{ padding: '5px' }}>
+                <AssetCard
+                  asset={asset}
+                  onUpdate={updateAsset}
+                  onDelete={deleteAsset}
+                />
+              </div>
+            ))}
+          </div>
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+            <DrawerTrigger asChild>
+              <Button onClick={() => setIsDrawerOpen(true)}>Add Asset</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <AssetsForm onAddAsset={addAsset} />
+              <DrawerFooter>
+                <DrawerClose asChild>
+                  <Button
+                    className="mx-auto w-full max-w-xs"
+                    variant="outline"
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </main>
         <Nav />
-      </main>
+      </div>
     </div>
   );
 }

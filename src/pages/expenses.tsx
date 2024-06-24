@@ -101,50 +101,50 @@ export default function Expenses() {
   };
 
   return (
-    <div className="grid min-h-screen w-screen grid-cols-1 bg-gradient-to-br from-slate-50 to-indigo-100 md:grid-cols-[1fr_300px]">
-      <main className="ml-80 flex w-full flex-col items-start justify-center gap-8 pr-80">
-        <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-          {totalExpenses !== undefined ? (
-            <div className="text-8xl font-bold text-gray-900 dark:text-gray-50">
-              {`$${totalExpenses?.toFixed(2)}`}
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-indigo-100">
+      <div className="grid min-h-screen w-full grid-cols-1 md:grid-cols-[1fr_300px]">
+        <main className="flex w-full flex-col items-start justify-center gap-8 p-4 md:p-8 lg:pl-24 xl:pl-32">
+          <div className="flex w-full flex-col items-start justify-center gap-4">
+            <div className="text-6xl font-bold text-gray-900 dark:text-gray-50 md:text-8xl">
+              ${totalExpenses?.toFixed(2) ?? "0.00"}
             </div>
-          ) : (
-            <div>Loading...</div>
-          )}
-        </div>
-        <div className="ml-2 text-gray-500 dark:text-gray-400">
-          Total Expenses
-        </div>
-        <div className="flex w-full flex-row flex-wrap items-start gap-4">
-          {expenses?.map((expense) => (
-            <ExpenseCard
-              key={expense.id}
-              expense={expense}
-              onUpdate={updateExpense}
-              onDelete={deleteExpense}
-            />
-          ))}
-        </div>
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerTrigger asChild>
-            <Button onClick={() => setIsDrawerOpen(true)}>Add Expense</Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <ExpensesForm onAddExpense={addExpense} />
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsDrawerOpen(false)}
-                >
-                  Cancel
-                </Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
+            <div className="ml-2 text-gray-500 dark:text-gray-400">
+              Total Expenses
+            </div>
+          </div>
+          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
+            {expenses?.map((expense) => (
+              <div key={expense.id} style={{ padding: '5px' }}>
+                <ExpenseCard
+                  expense={expense}
+                  onUpdate={updateExpense}
+                  onDelete={deleteExpense}
+                />
+              </div>
+            ))}
+          </div>
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+            <DrawerTrigger asChild>
+              <Button onClick={() => setIsDrawerOpen(true)}>Add Expense</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <ExpensesForm onAddExpense={addExpense} />
+              <DrawerFooter>
+                <DrawerClose asChild>
+                  <Button
+                    className="mx-auto w-full max-w-xs"
+                    variant="outline"
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </main>
         <Nav />
-      </main>
+      </div>
     </div>
   );
 }
