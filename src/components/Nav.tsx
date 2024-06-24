@@ -10,7 +10,7 @@ import {
   TrendingUpIcon,
   UserIcon,
   WalletIcon,
-  BriefcaseIcon
+  BriefcaseIcon,
 } from "../lib/svgs";
 
 const navItems = [
@@ -66,14 +66,10 @@ const navItems = [
       icon: <SettingsIcon className="h-7 w-7" />,
       label: "Settings",
     },
-  ]
+  ],
 ].flat();
 
-interface NavProps {
-  className?: string
-}
-
-export default function Nav({ className = "" }: NavProps) {
+export default function Nav() {
   return (
     <aside className="group fixed right-0 top-1/2 hidden w-20 -translate-y-1/2 transition-all duration-500 ease-in-out hover:w-64 md:flex">
       <div className="flex-1 overflow-auto py-2">

@@ -41,7 +41,7 @@ export function HomeCard({
             </div>
             {subItems && (
               <div className="grid grid-cols-2 gap-4 justify-items-end">
-                {[...Array(4)].map((_, index) => (
+                {Array.from({ length: 4 }, (_, index) => (
                   <div key={index} className="text-right">
                     {subItems[3 - index] && (
                       <>
