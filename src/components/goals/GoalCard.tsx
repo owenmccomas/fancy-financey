@@ -73,7 +73,7 @@ export default function GoalCard({
       goal.category as keyof typeof LucideIcons
     ] as React.ElementType) || LucideIcons.Target;
 
-  const renderInput = (name: keyof GoalFormData, label: string, type: string = "text") => (
+  const renderInput = (name: keyof GoalFormData, label: string, type = "text") => (
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
       <Input
