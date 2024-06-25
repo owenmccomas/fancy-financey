@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
-import AssetCard from "@/components/assets/AssetCard";
-import AssetsForm from "@/components/assets/AssetsForm";
+import GoalCard from "@/components/goals/GoalCard";
+import GoalsForm from "@/components/goals/GoalsForm";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,123 +12,116 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
+import type { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
 
-export default function Assets() {
+export default function Goals() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: assets, refetch: refetchAssets } = api.assets.getAll.useQuery();
-  const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
+  const { data: goals, refetch: refetchGoals } = api.goals.getAll.useQuery();
+  const { data: totalGoalProgress } = api.goals.getTotalProgress.useQuery();
 
-  const addAssetMutation = api.assets.create.useMutation({
+  const addGoalMutation = api.goals.create.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await refetchGoals();
       setIsDrawerOpen(false);
       toast({
-        title: "Asset added",
-        description: "Your new asset has been added successfully.",
+        title: "Goal added",
+        description: "Your new goal has been added successfully.",
       });
     },
     onError: () => {
       toast({
         title: "Error",
-        description: `Failed to add asset`,
+        description: "Failed to add goal",
         variant: "destructive",
       });
     },
   });
 
-  const updateAssetMutation = api.assets.update.useMutation({
+  const updateGoalMutation = api.goals.update.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await refetchGoals();
       toast({
-        title: "Asset updated",
-        description: "Your asset has been updated successfully.",
+        title: "Goal updated",
+        description: "Your goal has been updated successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: `Failed to update asset: ${error.message}`,
+        description: `Failed to update goal: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
-  const deleteAssetMutation = api.assets.delete.useMutation({
+  const deleteGoalMutation = api.goals.delete.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await refetchGoals();
       toast({
-        title: "Asset deleted",
-        description: "Your asset has been deleted successfully.",
+        title: "Goal deleted",
+        description: "Your goal has been deleted successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: `Failed to delete asset: ${error.message}`,
+        description: `Failed to delete goal: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
-  const addAsset = (newAsset: {
-    name: string;
-    value: number;
-    date: string;
-    category: string;
-    description?: string;
-  }) => {
-    addAssetMutation.mutate({
-      ...newAsset,
-      date: new Date(newAsset.date),
+  const addGoal = (newGoal: NewGoalInput) => {
+    const apiInput: GoalApiInput = {
+      ...newGoal,
+      targetDate: new Date(newGoal.targetDate),
+      description: newGoal.description ?? undefined,
+    };
+    addGoalMutation.mutate(apiInput);
+  };
+
+  const updateGoal = (updatedGoal: UpdateGoalInput) => {
+    updateGoalMutation.mutate({
+      ...updatedGoal,
+      description: updatedGoal.description ?? undefined,
     });
   };
 
-  const updateAsset = (updatedAsset: {
-    id: number;
-    name?: string;
-    value?: number;
-    date?: Date;
-    category?: string;
-    description?: string | null;
-  }) => {
-    updateAssetMutation.mutate(updatedAsset);
-  };
-
-  const deleteAsset = (id: number) => {
-    deleteAssetMutation.mutate({ id });
+  const deleteGoal = (id: number) => {
+    deleteGoalMutation.mutate({ id });
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-amber-100">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-blue-200">
       <div className="grid min-h-screen w-full grid-cols-1 md:grid-cols-[1fr_300px]">
         <main className="flex w-full flex-col items-start justify-center gap-8 p-4 md:p-8 lg:pl-24 xl:pl-32">
           <div className="flex w-full flex-col items-start justify-center gap-4">
             <div className="text-6xl font-bold text-gray-900 dark:text-gray-50 md:text-8xl">
-              ${totalAssetValue?.toFixed(2) ?? "0.00"}
+              {totalGoalProgress?.toFixed(2) ?? "0.00"}%
             </div>
             <div className="ml-2 text-gray-500 dark:text-gray-400">
-              Total Asset Value
+              Total Goal Progress
             </div>
           </div>
-          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-            {assets?.map((asset) => (
-              <div key={asset.id} style={{ padding: '5px' }}>
-                <AssetCard
-                  asset={asset}
-                  onUpdate={updateAsset}
-                  onDelete={deleteAsset}
+          <div className="flex flex-wrap" style={{ margin: "-5px" }}>
+            {goals?.map((goal) => (
+              <div key={goal.id} style={{ padding: "5px" }}>
+                <GoalCard
+                  goal={goal}
+                  onUpdate={updateGoal}
+                  onDelete={deleteGoal}
                 />
               </div>
             ))}
           </div>
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
-              <Button onClick={() => setIsDrawerOpen(true)}>Add Asset</Button>
+              <Button onClick={() => setIsDrawerOpen(true)}>Add Goal</Button>
             </DrawerTrigger>
             <DrawerContent>
-              <AssetsForm onAddAsset={addAsset} />
+              <GoalsForm onAddGoal={addGoal} />
               <DrawerFooter>
                 <DrawerClose asChild>
                   <Button

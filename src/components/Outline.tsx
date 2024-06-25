@@ -27,6 +27,9 @@ export function Outline() {
   const { data: topIncomes } = api.income.getTopIncomes.useQuery({ limit: 4 });
   const { data: topAssets } = api.assets.getTopAssets.useQuery({ limit: 4 });
   const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
+  const { data: totalBills } = api.bills.getTotalBills.useQuery();
+  const { data: topBills } = api.bills.getTopBills.useQuery({ limit: 4 });
+  const { data: totalGoalProgress } = api.goals.getTotalProgress.useQuery();
 
   const netWorth =
     (totalIncome ?? 0) -
@@ -41,6 +44,13 @@ export function Outline() {
     return formattedValue.endsWith(".00")
       ? `$${parseInt(formattedValue)}`
       : `$${formattedValue}`;
+  };
+  const formatValuePercentage = (value: number | null | undefined) => {
+    if (value === undefined || value === null) return "---.--";
+    const formattedValue = value.toFixed(2);
+    return formattedValue.endsWith(".00")
+      ? `${parseInt(formattedValue)}%`
+      : `${formattedValue}%`;
   };
 
   return (
@@ -124,22 +134,27 @@ export function Outline() {
             />
             <div className="col-span-1 my-2 h-px border-r bg-gray-300 sm:col-span-3"></div>
             <p className="col-span-1 text-gray-500 dark:text-gray-400 sm:col-span-3">
-              Bills Tracker and Goals (Doesn&apos;t Effect Net Worth)
+              Bills (Doesn&apos;t Affect Net Worth)
             </p>
             <HomeCard
-              href="#"
+              href="/bills"
               icon={Calendar}
               title="Bills"
-              value="$2,345"
+              value={formatValue(totalBills)}
               className="sm:col-span-2"
-              subItems={[
-                { label: "Electricity", value: "$150" },
-                { label: "Water", value: "$75" },
-                { label: "Internet", value: "$100" },
-                { label: "Phone", value: "$75" },
-              ]}
+              subItems={
+                topBills?.map((bill) => ({
+                  label: bill.title,
+                  value: formatValue(bill.amount),
+                })) ?? []
+              }
             />
-            <HomeCard href="#" icon={Briefcase} title="Goals" value="$10,000" />
+            <HomeCard
+              href="/goals"
+              icon={Briefcase}
+              title="Goals"
+              value={formatValuePercentage(totalGoalProgress)}
+            />
           </div>
         </main>
         <Nav />
