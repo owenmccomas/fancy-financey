@@ -12,13 +12,18 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
+import { CardSkeletonGroup } from "@/components/CardSkeleton";
 import type { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
 
 export default function Goals() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: goals, refetch: refetchGoals } = api.goals.getAll.useQuery();
+  const {
+    data: goals,
+    refetch: refetchGoals,
+    isLoading,
+  } = api.goals.getAll.useQuery();
   const { data: totalGoalProgress } = api.goals.getTotalProgress.useQuery();
 
   const addGoalMutation = api.goals.create.useMutation({
@@ -105,17 +110,21 @@ export default function Goals() {
               Total Goal Progress
             </div>
           </div>
-          <div className="flex flex-wrap" style={{ margin: "-5px" }}>
-            {goals?.map((goal) => (
-              <div key={goal.id} style={{ padding: "5px" }}>
-                <GoalCard
-                  goal={goal}
-                  onUpdate={updateGoal}
-                  onDelete={deleteGoal}
-                />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <CardSkeletonGroup color="bg-blue-300" />
+          ) : (
+            <div className="flex flex-wrap" style={{ margin: "-5px" }}>
+              {goals?.map((goal) => (
+                <div key={goal.id} style={{ padding: "5px" }}>
+                  <GoalCard
+                    goal={goal}
+                    onUpdate={updateGoal}
+                    onDelete={deleteGoal}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <Button onClick={() => setIsDrawerOpen(true)}>Add Goal</Button>

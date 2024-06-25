@@ -14,22 +14,32 @@ import {
 import { HoverCard } from "@radix-ui/react-hover-card";
 import { HoverCardTrigger } from "./ui/hover-card";
 import NetWorthHoverCard from "./NetWorthHoverCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function Outline() {
   const sessionData = useSession().data;
-  const { data: savingsAmount } = api.savings.get.useQuery();
-  const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
-  const { data: topExpenses } = api.expenses.getTopExpenses.useQuery({
-    limit: 4,
-  });
-  const { data: investmentsAmount } = api.investments.get.useQuery();
-  const { data: totalIncome } = api.income.getTotalIncome.useQuery();
-  const { data: topIncomes } = api.income.getTopIncomes.useQuery({ limit: 4 });
-  const { data: topAssets } = api.assets.getTopAssets.useQuery({ limit: 4 });
-  const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
-  const { data: totalBills } = api.bills.getTotalBills.useQuery();
-  const { data: topBills } = api.bills.getTopBills.useQuery({ limit: 4 });
-  const { data: totalGoalProgress } = api.goals.getTotalProgress.useQuery();
+  const { data: savingsAmount, isLoading: isSavingsLoading } =
+    api.savings.get.useQuery();
+  const { data: totalExpenses, isLoading: isExpensesLoading } =
+    api.expenses.getTotalExpenses.useQuery();
+  const { data: topExpenses, isLoading: isTopExpensesLoading } =
+    api.expenses.getTopExpenses.useQuery({ limit: 4 });
+  const { data: investmentsAmount, isLoading: isInvestmentsLoading } =
+    api.investments.get.useQuery();
+  const { data: totalIncome, isLoading: isIncomeLoading } =
+    api.income.getTotalIncome.useQuery();
+  const { data: topIncomes, isLoading: isTopIncomesLoading } =
+    api.income.getTopIncomes.useQuery({ limit: 4 });
+  const { data: topAssets, isLoading: isTopAssetsLoading } =
+    api.assets.getTopAssets.useQuery({ limit: 4 });
+  const { data: totalAssetValue, isLoading: isAssetsLoading } =
+    api.assets.getTotalAssetValue.useQuery();
+  const { data: totalBills, isLoading: isBillsLoading } =
+    api.bills.getTotalBills.useQuery();
+  const { data: topBills, isLoading: isTopBillsLoading } =
+    api.bills.getTopBills.useQuery({ limit: 4 });
+  const { data: totalGoalProgress, isLoading: isGoalsLoading } =
+    api.goals.getTotalProgress.useQuery();
 
   const netWorth =
     (totalIncome ?? 0) -
@@ -39,14 +49,14 @@ export function Outline() {
     (investmentsAmount ?? 0);
 
   const formatValue = (value: number | null | undefined) => {
-    if (value === undefined || value === null) return "---.--";
+    if (value === undefined || value === null) return "";
     const formattedValue = value.toFixed(2);
     return formattedValue.endsWith(".00")
       ? `$${parseInt(formattedValue)}`
       : `$${formattedValue}`;
   };
   const formatValuePercentage = (value: number | null | undefined) => {
-    if (value === undefined || value === null) return "---.--";
+    if (value === undefined || value === null) return "";
     const formattedValue = value.toFixed(2);
     return formattedValue.endsWith(".00")
       ? `${parseInt(formattedValue)}%`
@@ -63,9 +73,15 @@ export function Outline() {
             </p>
             <div className="flex items-center gap-2">
               <div className="text-6xl font-bold text-gray-900 dark:text-gray-50 md:text-8xl">
-                {netWorth !== undefined && netWorth !== null
-                  ? `$${netWorth.toFixed(2)}`
-                  : "---.--"}
+                {isIncomeLoading ||
+                isExpensesLoading ||
+                isSavingsLoading ||
+                isAssetsLoading ||
+                isInvestmentsLoading ? (
+                  <Skeleton className="h-20 w-[300px] bg-gray-300" />
+                ) : (
+                  `$${netWorth.toFixed(2)}`
+                )}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -86,38 +102,40 @@ export function Outline() {
               icon={DollarSign}
               title="Income"
               value={formatValue(totalIncome)}
+              isLoading={isIncomeLoading || isTopIncomesLoading}
+              showSubItemSkeletons={true}
               className="sm:col-span-2"
-              subItems={
-                topIncomes?.map((income) => ({
-                  label: income.source,
-                  value: formatValue(income.amount),
-                })) ?? []
-              }
+              subItems={topIncomes?.map((income) => ({
+                label: income.source,
+                value: formatValue(income.amount),
+              }))}
             />
             <HomeCard
               href="/savings"
               icon={PiggyBank}
               title="Savings"
               value={formatValue(savingsAmount)}
+              isLoading={isSavingsLoading}
             />
             <HomeCard
               href="/expenses"
               icon={Wallet}
               title="Expenses"
               value={formatValue(totalExpenses)}
+              isLoading={isExpensesLoading || isTopExpensesLoading}
+              showSubItemSkeletons={true}
               className="sm:col-span-2 lg:col-span-3"
-              subItems={
-                topExpenses?.map((expense) => ({
-                  label: expense.title,
-                  value: formatValue(expense.amount),
-                })) ?? []
-              }
+              subItems={topExpenses?.map((expense) => ({
+                label: expense.title,
+                value: formatValue(expense.amount),
+              }))}
             />
             <HomeCard
               href="/investments"
               icon={TrendingUp}
               title="Investments"
               value={formatValue(investmentsAmount)}
+              isLoading={isInvestmentsLoading}
             />
             <HomeCard
               href="/assets"
@@ -125,12 +143,12 @@ export function Outline() {
               title="Assets"
               className="sm:col-span-2"
               value={formatValue(totalAssetValue)}
-              subItems={
-                topAssets?.map((asset) => ({
-                  label: asset.name,
-                  value: formatValue(asset.value),
-                })) ?? []
-              }
+              isLoading={isAssetsLoading || isTopAssetsLoading}
+              showSubItemSkeletons={true}
+              subItems={topAssets?.map((asset) => ({
+                label: asset.name,
+                value: formatValue(asset.value),
+              }))}
             />
             <div className="col-span-1 my-2 h-px border-r bg-gray-300 sm:col-span-3"></div>
             <p className="col-span-1 text-gray-500 dark:text-gray-400 sm:col-span-3">
@@ -141,19 +159,20 @@ export function Outline() {
               icon={Calendar}
               title="Bills"
               value={formatValue(totalBills)}
+              isLoading={isBillsLoading || isTopBillsLoading}
+              showSubItemSkeletons={true}
               className="sm:col-span-2"
-              subItems={
-                topBills?.map((bill) => ({
-                  label: bill.title,
-                  value: formatValue(bill.amount),
-                })) ?? []
-              }
+              subItems={topBills?.map((bill) => ({
+                label: bill.title,
+                value: formatValue(bill.amount),
+              }))}
             />
             <HomeCard
               href="/goals"
               icon={Briefcase}
               title="Goals"
               value={formatValuePercentage(totalGoalProgress)}
+              isLoading={isGoalsLoading}
             />
           </div>
         </main>

@@ -12,12 +12,17 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
+import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
 export default function Assets() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: assets, refetch: refetchAssets } = api.assets.getAll.useQuery();
+  const {
+    data: assets,
+    refetch: refetchAssets,
+    isLoading,
+  } = api.assets.getAll.useQuery();
   const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
 
   const addAssetMutation = api.assets.create.useMutation({
@@ -112,17 +117,21 @@ export default function Assets() {
               Total Asset Value
             </div>
           </div>
-          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-            {assets?.map((asset) => (
-              <div key={asset.id} style={{ padding: '5px' }}>
-                <AssetCard
-                  asset={asset}
-                  onUpdate={updateAsset}
-                  onDelete={deleteAsset}
-                />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <CardSkeletonGroup color="bg-amber-100" />
+          ) : (
+            <div className="flex flex-wrap" style={{ margin: "-5px" }}>
+              {assets?.map((asset) => (
+                <div key={asset.id} style={{ padding: "5px" }}>
+                  <AssetCard
+                    asset={asset}
+                    onUpdate={updateAsset}
+                    onDelete={deleteAsset}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <Button onClick={() => setIsDrawerOpen(true)}>Add Asset</Button>
