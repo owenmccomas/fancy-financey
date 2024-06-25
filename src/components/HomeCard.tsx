@@ -40,20 +40,23 @@ export function HomeCard({
       ));
     }
 
-    return Array.from({ length: 4 }, (_, index) => (
-      <div key={index} className="text-right">
-        {subItems && subItems[3 - index] && (
-          <>
-            <p className="text-gray-500 dark:text-gray-400">
-              {subItems[3 - index]?.label}
-            </p>
-            <div className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-              {subItems[3 - index]?.value}
-            </div>
-          </>
-        )}
-      </div>
-    ));
+    return Array.from({ length: 4 }, (_, index) => {
+      const item = subItems?.[3 - index];
+      return (
+        <div key={index} className="text-right">
+          {item && (
+            <>
+              <p className="text-gray-500 dark:text-gray-400">
+                {item.label}
+              </p>
+              <div className="text-2xl font-bold text-gray-900 dark:text-gray-50">
+                {item.value}
+              </div>
+            </>
+          )}
+        </div>
+      );
+    });
   };
 
   return (
@@ -74,7 +77,7 @@ export function HomeCard({
               </div>
               <p className="text-gray-500 dark:text-gray-400">{title}</p>
             </div>
-            {(subItems || (isLoading && showSubItemSkeletons)) && (
+            {(subItems ?? (isLoading && showSubItemSkeletons)) && (
               <div className="grid grid-cols-2 gap-4 justify-items-end">
                 {renderSubItems()}
               </div>

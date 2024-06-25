@@ -23,7 +23,7 @@ interface CardSkeletonGroupProps {
 export function CardSkeletonGroup({ color = "bg-gray-200" }: CardSkeletonGroupProps) {
   return (
     <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-      {[...Array(3)].map((_, index) => (
+      {Array.from<undefined, JSX.Element>({ length: 3 }, (_, index) => (
         <div key={index} style={{ padding: '5px' }}>
           <CardSkeleton color={color} />
         </div>

@@ -152,7 +152,7 @@ export function Outline() {
             />
             <div className="col-span-1 my-2 h-px border-r bg-gray-300 sm:col-span-3"></div>
             <p className="col-span-1 text-gray-500 dark:text-gray-400 sm:col-span-3">
-              Bills (Doesn&apos;t Affect Net Worth)
+              Trackers for your Bills and your Goals (Doesn&apos;t Affect Net Worth)
             </p>
             <HomeCard
               href="/bills"
