@@ -27,44 +27,44 @@ import { Progress } from "@/components/ui/progress";
 import type { UpdateGoalInput, GoalStatus, GoalFormData } from "@/types";
 
 interface GoalCardProps {
-    goal: Goal;
-    onUpdate: (updatedGoal: UpdateGoalInput) => void;
-    onDelete: (id: number) => void;
-  }
-  
-  export default function GoalCard({
-    goal,
-    onUpdate,
-    onDelete,
-  }: GoalCardProps) {
-    const [isOpen, setIsOpen] = useState(false);
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<GoalFormData>({
-      defaultValues: {
-        title: goal.title,
-        targetAmount: goal.targetAmount,
-        currentAmount: goal.currentAmount,
-        targetDate: goal.targetDate.toISOString().split('T')[0], // Convert Date to YYYY-MM-DD string
-        category: goal.category,
-        priority: goal.priority,
-        description: goal.description ?? undefined,
-      },
-    });
-  
-    const onSubmit = (values: GoalFormData) => {
-      const updatedValues: UpdateGoalInput = {
-        id: goal.id,
-        ...values,
-        targetDate: new Date(values.targetDate),
-        status: goal.status as GoalStatus,
-        description: values.description ?? null,
-      };
-      onUpdate(updatedValues);
-      setIsOpen(false);
+  goal: Goal;
+  onUpdate: (updatedGoal: UpdateGoalInput) => void;
+  onDelete: (id: number) => void;
+}
+
+export default function GoalCard({
+  goal,
+  onUpdate,
+  onDelete,
+}: GoalCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<GoalFormData>({
+    defaultValues: {
+      title: goal.title,
+      targetAmount: goal.targetAmount,
+      currentAmount: goal.currentAmount,
+      targetDate: goal.targetDate.toISOString().split('T')[0],
+      category: goal.category,
+      priority: goal.priority,
+      description: goal.description ?? undefined,
+    },
+  });
+
+  const onSubmit = (values: GoalFormData) => {
+    const updatedValues: UpdateGoalInput = {
+      id: goal.id,
+      ...values,
+      targetDate: new Date(values.targetDate),
+      status: goal.status as GoalStatus,
+      description: values.description ?? null,
     };
+    onUpdate(updatedValues);
+    setIsOpen(false);
+  };
 
   const progressPercentage = (goal.currentAmount / goal.targetAmount) * 100;
 
@@ -72,6 +72,20 @@ interface GoalCardProps {
     (LucideIcons[
       goal.category as keyof typeof LucideIcons
     ] as React.ElementType) || LucideIcons.Target;
+
+  const renderInput = (name: keyof GoalFormData, label: string, type = "text") => (
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <Input
+        {...register(name, { required: `${label} is required` })}
+        type={type}
+        placeholder={`Enter ${label.toLowerCase()}`}
+      />
+      {errors[name] && (
+        <p className="mt-1 text-sm text-red-500">{errors[name]?.message}</p>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -105,83 +119,13 @@ interface GoalCardProps {
             <DialogTitle>Edit {goal.title} Goal</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              {...register("title", { required: "Title is required" })}
-              placeholder="Goal Title"
-              defaultValue={goal.title}
-              className="mb-4"
-            />
-            {errors.title && (
-              <p className="mb-4 mt-2 text-red-500">{errors.title.message}</p>
-            )}
-            <Input
-              {...register("targetAmount", {
-                valueAsNumber: true,
-                required: "Target amount is required",
-                min: {
-                  value: 0.01,
-                  message: "Target amount must be greater than 0",
-                },
-              })}
-              type="number"
-              step={0.01}
-              placeholder={`Current Target: $${goal.targetAmount}`}
-              className="mb-4"
-            />
-            {errors.targetAmount && (
-              <p className="mb-4 mt-2 text-red-500">
-                {errors.targetAmount.message}
-              </p>
-            )}
-            <Input
-              {...register("currentAmount", {
-                valueAsNumber: true,
-                required: "Current amount is required",
-                min: {
-                  value: 0,
-                  message: "Current amount must be 0 or greater",
-                },
-              })}
-              type="number"
-              step={0.01}
-              placeholder={`Current Progress: $${goal.currentAmount}`}
-              className="mb-4"
-            />
-            {errors.currentAmount && (
-              <p className="mb-4 mt-2 text-red-500">
-                {errors.currentAmount.message}
-              </p>
-            )}
-            <Input
-              {...register("targetDate", {
-                required: "Target date is required",
-              })}
-              type="date"
-              defaultValue={goal.targetDate.toISOString().split("T")[0]}
-              className="mb-4"
-            />
-            {errors.targetDate && (
-              <p className="mb-4 mt-2 text-red-500">
-                {errors.targetDate.message}
-              </p>
-            )}
-            <Input
-              {...register("category", { required: "Category is required" })}
-              placeholder="Category"
-              defaultValue={goal.category}
-              className="mb-4"
-            />
-            {errors.category && (
-              <p className="mb-4 mt-2 text-red-500">
-                {errors.category.message}
-              </p>
-            )}
-            <Input
-              {...register("description")}
-              placeholder="Description (optional)"
-              defaultValue={goal.description ?? ""}
-              className="mb-4"
-            />
+            {renderInput("title", "Title")}
+            {renderInput("targetAmount", "Target Amount", "number")}
+            {renderInput("currentAmount", "Current Amount", "number")}
+            {renderInput("targetDate", "Target Date", "date")}
+            {renderInput("category", "Category")}
+            {renderInput("priority", "Priority", "number")}
+            {renderInput("description", "Description (Optional)")}
             <Button className="w-full" type="submit">
               Save Changes
             </Button>
