@@ -1,29 +1,118 @@
-# Create T3 App
+# Financial Management App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is a comprehensive financial management application that allows users to track their income, expenses, savings, investments, assets, bills, and financial goals. With an intuitive interface and powerful features, you can easily manage your personal finances and work towards your financial objectives.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- Dashboard overview of your financial status
+- Income tracking with detailed source information
+- Expense management categorized by type
+- Savings tracker with easy update functionality
+- Investment portfolio management
+- Asset tracking and valuation
+- Bill management with due date reminders
+- Goal setting and progress tracking
+- Customizable categories for various financial entries
+- Data visualization for better financial insights
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Getting Started
 
+Follow these steps to set up the project on your local machine:
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+   ```
+
+2. **Install dependencies**
+   ```bash
+   yarn
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Open the `.env` file and fill in the necessary variables.
+
+4. **Create and set up the database**
+   - Install PostgreSQL if not already installed
+   - Create a new database:
+     ```bash
+     createdb <database-name>
+     ```
+
+5. **Run database migrations**
+   ```bash
+   yarn migrate
+   ```
+
+6. **Seed the database (if applicable)**
+   ```bash
+   yarn seed
+   ```
+
+7. **Start the development server**
+   ```bash
+   yarn dev
+   ```
+
+The application should now be running at `http://localhost:3000`.
+
+## Technologies
+
+This project uses the T3 Stack:
 - [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+Additional libraries:
+- [Lucide Icons](https://lucide.dev/)
+- [Recharts](https://recharts.org/) for data visualization
+- [shadcn/ui](https://ui.shadcn.com/) for UI components
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Project Structure
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- `components/`: Reusable React components
+- `pages/`: Next.js pages and API routes
+- `server/`: Server-side code, including tRPC routers
+- `utils/`: Utility functions and helpers
+- `types/`: TypeScript type definitions
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Key Components
 
-## How do I deploy this?
+- `Outline.tsx`: Main dashboard component
+- `Nav.tsx`: Navigation component
+- `IncomeCard.tsx`, `ExpenseCard.tsx`, etc.: Individual financial entry components
+- `IncomeForm.tsx`, `ExpensesForm.tsx`, etc.: Forms for adding new financial entries
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## API Routes
+
+The application uses tRPC for type-safe API routes. Key routers include:
+- `income.ts`
+- `expenses.ts`
+- `savings.ts`
+- `investments.ts`
+- `assets.ts`
+- `bills.ts`
+- `goals.ts`
+
+## Database Schema
+
+The database schema is defined in `prisma/schema.prisma` and includes models for User, Income, Expense, Savings, Investment, Asset, Bill, and Goal.
+
+## Authentication
+
+This app uses NextAuth.js for authentication, supporting Discord and Google providers.
+
+## Versioning
+
+Project versioning follows Semantic Versioning and is tracked using GitHub Releases.
+
+## Contributing
+
+Please read our contributing guidelines before submitting pull requests.
+
+For more detailed information about the project, please refer to the documentation or contact the development team.
