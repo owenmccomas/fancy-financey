@@ -113,17 +113,6 @@ export default function ExpenseCard({
               <p className="mb-4 mt-2 text-red-500">{errors.date.message}</p>
             )}
             <Input
-              {...register("category", { required: "Category is required" })}
-              placeholder="Category"
-              defaultValue={expense.category}
-              className="mb-4"
-            />
-            {errors.category && (
-              <p className="mb-4 mt-2 text-red-500">
-                {errors.category.message}
-              </p>
-            )}
-            <Input
               {...register("description")}
               placeholder="Description (optional)"
               defaultValue={expense.description ?? ""}

@@ -109,12 +109,6 @@ export default function AssetCard({
             {errors.value && (
               <p className="mb-4 mt-2 text-red-500">{errors.value.message}</p>
             )}
-            <Input
-              {...register("category", { required: "Category is required" })}
-              placeholder="Category"
-              defaultValue={asset.category}
-              className="mb-4"
-            />
             {errors.category && (
               <p className="mb-4 mt-2 text-red-500">
                 {errors.category.message}
