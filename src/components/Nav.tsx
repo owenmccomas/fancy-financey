@@ -8,7 +8,6 @@ import {
   PiggyBankIcon,
   SettingsIcon,
   TrendingUpIcon,
-  UserIcon,
   WalletIcon,
   BriefcaseIcon,
   SignoutIcon,

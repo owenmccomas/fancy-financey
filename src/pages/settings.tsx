@@ -13,11 +13,8 @@ function Settings() {
   const { data: sessionData, update: updateSession } = useSession();
   const { toast } = useToast();
 
-  const [name, setName] = useState(sessionData?.user?.name || "");
-  const [email, setEmail] = useState(sessionData?.user?.email || "");
-  const [darkMode, setDarkMode] = useState(false);
-  const [currency, setCurrency] = useState("USD");
-  const [notifications, setNotifications] = useState(true);
+  const [name, setName] = useState(sessionData?.user?.name ?? "");
+  const [email, setEmail] = useState(sessionData?.user?.email ?? "");
 
   const updateUserMutation = api.user.update.useMutation({
     onSuccess: async () => {
@@ -41,11 +38,6 @@ function Settings() {
     updateUserMutation.mutate({
       name,
       email,
-      settings: {
-        darkMode,
-        currency,
-        notifications,
-      },
     });
   };
 

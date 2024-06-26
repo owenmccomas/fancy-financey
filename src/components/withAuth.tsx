@@ -1,12 +1,11 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { ComponentType } from "react";
+import type { ComponentType, FC } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
-export function withAuth<P extends object>(WrappedComponent: ComponentType<P>) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const WithAuth: ComponentType<P> = (props: any) => {
+export function withAuth<P extends JSX.IntrinsicAttributes>(WrappedComponent: ComponentType<P>): FC<P> {
+  const WithAuth: FC<P> = (props) => {
     const { data: session, status } = useSession();
     const router = useRouter();
 
@@ -26,13 +25,11 @@ export function withAuth<P extends object>(WrappedComponent: ComponentType<P>) {
     return <WrappedComponent {...props} />;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Object.keys(WrappedComponent as any).forEach((key) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (WithAuth as any)[key] = (WrappedComponent as any)[key];
-  });
+  const wrappedComponentName = WrappedComponent.displayName 
+    || WrappedComponent.name 
+    || 'Component';
 
-  WithAuth.displayName = `withAuth(${WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'})`;
+  WithAuth.displayName = `withAuth(${wrappedComponentName})`;
 
   return WithAuth;
 }
