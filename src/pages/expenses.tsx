@@ -12,13 +12,13 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
+import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
 export default function Expenses() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: expenses, refetch: refetchExpenses } =
-    api.expenses.getAll.useQuery();
+  const { data: expenses, refetch: refetchExpenses, isLoading } = api.expenses.getAll.useQuery();
   const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
 
   const addExpenseMutation = api.expenses.create.useMutation({
@@ -112,17 +112,21 @@ export default function Expenses() {
               Total Expenses
             </div>
           </div>
-          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-            {expenses?.map((expense) => (
-              <div key={expense.id} style={{ padding: '5px' }}>
-                <ExpenseCard
-                  expense={expense}
-                  onUpdate={updateExpense}
-                  onDelete={deleteExpense}
-                />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <CardSkeletonGroup color="bg-indigo-200" />
+          ) : (
+            <div className="flex flex-wrap" style={{ margin: '-5px' }}>
+              {expenses?.map((expense) => (
+                <div key={expense.id} style={{ padding: '5px' }}>
+                  <ExpenseCard
+                    expense={expense}
+                    onUpdate={updateExpense}
+                    onDelete={deleteExpense}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <Button onClick={() => setIsDrawerOpen(true)}>Add Expense</Button>

@@ -12,12 +12,17 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
+import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
 export default function IncomeTracker() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: incomes, refetch: refetchIncomes } = api.income.getAll.useQuery();
+  const {
+    data: incomes,
+    refetch: refetchIncomes,
+    isLoading,
+  } = api.income.getAll.useQuery();
   const { data: totalIncome } = api.income.getTotalIncome.useQuery();
 
   const addIncomeMutation = api.income.create.useMutation({
@@ -110,17 +115,21 @@ export default function IncomeTracker() {
               Total Income
             </div>
           </div>
-          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-            {incomes?.map((income) => (
-              <div key={income.id} style={{ padding: '5px' }}>
-                <IncomeCard
-                  income={income}
-                  onUpdate={updateIncome}
-                  onDelete={deleteIncome}
-                />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <CardSkeletonGroup color="bg-green-100" />
+          ) : (
+            <div className="flex flex-wrap" style={{ margin: "-5px" }}>
+              {incomes?.map((income) => (
+                <div key={income.id} style={{ padding: "5px" }}>
+                  <IncomeCard
+                    income={income}
+                    onUpdate={updateIncome}
+                    onDelete={deleteIncome}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <Button onClick={() => setIsDrawerOpen(true)}>Add Income</Button>

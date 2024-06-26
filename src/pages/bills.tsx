@@ -12,12 +12,17 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
+import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
 export default function Bills() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: bills, refetch: refetchBills } = api.bills.getAll.useQuery();
+  const {
+    data: bills,
+    refetch: refetchBills,
+    isLoading,
+  } = api.bills.getAll.useQuery();
   const { data: totalBills } = api.bills.getTotalBills.useQuery();
 
   const addBillMutation = api.bills.create.useMutation({
@@ -111,17 +116,21 @@ export default function Bills() {
               Total Bills
             </div>
           </div>
-          <div className="flex flex-wrap" style={{ margin: '-5px' }}>
-            {bills?.map((bill) => (
-              <div key={bill.id} style={{ padding: '5px' }}>
-                <BillCard
-                  bill={bill}
-                  onUpdate={updateBill}
-                  onDelete={deleteBill}
-                />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <CardSkeletonGroup color="bg-blue-200" />
+          ) : (
+            <div className="flex flex-wrap" style={{ margin: "-5px" }}>
+              {bills?.map((bill) => (
+                <div key={bill.id} style={{ padding: "5px" }}>
+                  <BillCard
+                    bill={bill}
+                    onUpdate={updateBill}
+                    onDelete={deleteBill}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <Button onClick={() => setIsDrawerOpen(true)}>Add Bill</Button>
