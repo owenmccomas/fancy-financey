@@ -22,7 +22,7 @@ export default function Home() {
   if (!sessionData) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-indigo-100">
-        <h2 className="m-5 mb-1 text-2xl">
+        <h2 className="m-5 mb-1 text-2xl text-center">
           Welcome to Your New Favorite Finance Tracker
         </h2>
         <h3 className="mb-3 text-gray-500">
