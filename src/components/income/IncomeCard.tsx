@@ -104,15 +104,7 @@ export default function IncomeCard({
             {errors.amount && (
               <p className="mb-4 mt-2 text-red-500">{errors.amount.message}</p>
             )}
-            <Input
-              {...register("source", { required: "Source is required" })}
-              placeholder="Source"
-              defaultValue={income.source}
-              className="mb-4"
-            />
-            {errors.source && (
-              <p className="mb-4 mt-2 text-red-500">{errors.source.message}</p>
-            )}
+
             <Input
               {...register("description")}
               placeholder="Description (optional)"

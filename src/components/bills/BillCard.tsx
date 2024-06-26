@@ -86,7 +86,7 @@ export default function BillCard({
           <DialogHeader>
             <DialogTitle>Edit {bill.title} Bill</DialogTitle>
             <DialogDescription>
-              Update your {bill.category.toLowerCase()} bill here.
+              Update your bill here.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -113,12 +113,6 @@ export default function BillCard({
             {errors.dueDate && (
               <p className="mb-4 mt-2 text-red-500">{errors.dueDate.message}</p>
             )}
-            <Input
-              {...register("category", { required: "Category is required" })}
-              placeholder="Category"
-              defaultValue={bill.category}
-              className="mb-4"
-            />
             {errors.category && (
               <p className="mb-4 mt-2 text-red-500">
                 {errors.category.message}

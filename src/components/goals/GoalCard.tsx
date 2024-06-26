@@ -50,7 +50,7 @@ export default function GoalCard({
       targetDate: goal.targetDate.toISOString().split('T')[0],
       category: goal.category,
       priority: goal.priority,
-      description: goal.description ?? undefined,
+      description: goal.description ?? '',
     },
   });
 
@@ -73,11 +73,11 @@ export default function GoalCard({
       goal.category as keyof typeof LucideIcons
     ] as React.ElementType) || LucideIcons.Target;
 
-  const renderInput = (name: keyof GoalFormData, label: string, type = "text") => (
+  const renderInput = (name: keyof GoalFormData, label: string, type = "text", isRequired = true) => (
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
       <Input
-        {...register(name, { required: `${label} is required` })}
+        {...register(name, { required: isRequired ? `${label} is required` : false })}
         type={type}
         placeholder={`Enter ${label.toLowerCase()}`}
       />
@@ -123,9 +123,8 @@ export default function GoalCard({
             {renderInput("targetAmount", "Target Amount", "number")}
             {renderInput("currentAmount", "Current Amount", "number")}
             {renderInput("targetDate", "Target Date", "date")}
-            {renderInput("category", "Category")}
             {renderInput("priority", "Priority", "number")}
-            {renderInput("description", "Description (Optional)")}
+            {renderInput("description", "Description", "text", false)}
             <Button className="w-full" type="submit">
               Save Changes
             </Button>
