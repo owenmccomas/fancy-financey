@@ -78,7 +78,7 @@ export function Outline() {
                 isSavingsLoading ||
                 isAssetsLoading ||
                 isInvestmentsLoading ? (
-                  <Skeleton className="h-20 w-[300px] bg-gray-300" />
+                  <Skeleton className="h-20 w-[500px] bg-gray-300 my-10" />
                 ) : (
                   `$${netWorth.toFixed(2)}`
                 )}

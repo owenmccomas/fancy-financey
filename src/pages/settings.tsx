@@ -1,3 +1,4 @@
+import { withAuth } from "@/components/withAuth";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
@@ -5,12 +6,10 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function Settings() {
+function Settings() {
   const { data: sessionData, update: updateSession } = useSession();
   const { toast } = useToast();
 
@@ -93,3 +92,5 @@ export default function Settings() {
     </div>
   );
 }
+
+export default withAuth(Settings);

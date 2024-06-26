@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
+import { withAuth } from "@/components/withAuth";
 import AssetCard from "@/components/assets/AssetCard";
 import AssetsForm from "@/components/assets/AssetsForm";
 import Nav from "@/components/Nav";
@@ -14,7 +15,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
-export default function Assets() {
+function Assets() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
@@ -157,3 +158,5 @@ export default function Assets() {
     </div>
   );
 }
+
+export default withAuth(Assets);

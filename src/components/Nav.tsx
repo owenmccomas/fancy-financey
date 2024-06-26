@@ -57,7 +57,7 @@ const navItems = [
       label: "Goals",
     },
     {
-      href: "/",
+      href: "/sign-out",
       icon: <SignoutIcon className="h-7 w-7" />,
       label: "Signout",
       onClick: () => signOut(),

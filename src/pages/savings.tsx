@@ -1,3 +1,4 @@
+import { withAuth } from "@/components/withAuth";
 import { useState } from "react";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { AlertCircle, Plus, Minus } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { api } from "@/utils/api";
 
-export default function SavingsTracker() {
+function SavingsTracker() {
   const [input, setInput] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -105,3 +106,5 @@ export default function SavingsTracker() {
     </div>
   );
 }
+
+export default withAuth(SavingsTracker);

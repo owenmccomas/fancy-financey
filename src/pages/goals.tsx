@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
+import { withAuth } from "@/components/withAuth";
 import GoalCard from "@/components/goals/GoalCard";
 import GoalsForm from "@/components/goals/GoalsForm";
 import Nav from "@/components/Nav";
@@ -15,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
 import type { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
 
-export default function Goals() {
+function Goals() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
@@ -150,3 +151,5 @@ export default function Goals() {
     </div>
   );
 }
+
+export default withAuth(Goals);
