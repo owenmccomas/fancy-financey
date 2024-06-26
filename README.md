@@ -27,35 +27,27 @@ Follow these steps to set up the project on your local machine:
 
 2. **Install dependencies**
    ```bash
-   yarn
+   npm install
    ```
 
 3. **Set up environment variables**
    ```bash
-   cp .env.example .env
+   .env.example .env
    ```
    Open the `.env` file and fill in the necessary variables.
 
 4. **Create and set up the database**
    - Install PostgreSQL if not already installed
-   - Create a new database:
-     ```bash
-     createdb <database-name>
-     ```
+   - Create a new database with a database provider
 
 5. **Run database migrations**
    ```bash
-   yarn migrate
+   npm prisma migrate
    ```
 
-6. **Seed the database (if applicable)**
+6. **Start the development server**
    ```bash
-   yarn seed
-   ```
-
-7. **Start the development server**
-   ```bash
-   yarn dev
+   npm run dev
    ```
 
 The application should now be running at `http://localhost:3000`.
@@ -70,7 +62,6 @@ This project uses the T3 Stack:
 
 Additional libraries:
 - [Lucide Icons](https://lucide.dev/)
-- [Recharts](https://recharts.org/) for data visualization
 - [shadcn/ui](https://ui.shadcn.com/) for UI components
 
 ## Project Structure
@@ -105,7 +96,7 @@ The database schema is defined in `prisma/schema.prisma` and includes models for
 
 ## Authentication
 
-This app uses NextAuth.js for authentication, supporting Discord and Google providers.
+This app uses NextAuth.js for authentication, supporting the Google provider.
 
 ## Versioning
 
@@ -115,4 +106,4 @@ Project versioning follows Semantic Versioning and is tracked using GitHub Relea
 
 Please read our contributing guidelines before submitting pull requests.
 
-For more detailed information about the project, please refer to the documentation or contact the development team.
+For more detailed information about the project, please refer to the documentation or me.
