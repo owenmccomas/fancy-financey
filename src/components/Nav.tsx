@@ -11,6 +11,7 @@ import {
   UserIcon,
   WalletIcon,
   BriefcaseIcon,
+  SignoutIcon,
 } from "../lib/svgs";
 
 const navItems = [
@@ -56,9 +57,9 @@ const navItems = [
       label: "Goals",
     },
     {
-      href: "/account",
-      icon: <UserIcon className="h-7 w-7" />,
-      label: "Account",
+      href: "/",
+      icon: <SignoutIcon className="h-7 w-7" />,
+      label: "Signout",
       onClick: () => signOut(),
     },
     {
