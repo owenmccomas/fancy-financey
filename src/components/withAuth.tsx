@@ -26,8 +26,8 @@ export function withAuth<P extends JSX.IntrinsicAttributes>(WrappedComponent: Co
   };
 
   const wrappedComponentName = WrappedComponent.displayName 
-    || WrappedComponent.name 
-    || 'Component';
+    ?? WrappedComponent.name 
+    ?? 'Component';
 
   WithAuth.displayName = `withAuth(${wrappedComponentName})`;
 
