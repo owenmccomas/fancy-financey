@@ -1,3 +1,4 @@
+import { withAuth } from "@/components/withAuth";
 import { useState } from "react";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { AlertCircle, Plus, Minus } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { api } from "@/utils/api";
 
-export default function InvestmentsTracker() {
+function InvestmentsTracker() {
   const [input, setInput] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -67,9 +68,11 @@ export default function InvestmentsTracker() {
               Current Investments Total
             </div>
           </div>
-          <Card className="w-full max-w-sm md:max-w-md bg-gradient-to-br from-white to-teal-50 transition hover:shadow-md">
+          <Card className="w-full max-w-sm bg-gradient-to-br from-white to-teal-50 transition hover:shadow-md md:max-w-md">
             <CardHeader>
-              <CardTitle className="text-lg md:text-xl">Investments Tracker</CardTitle>
+              <CardTitle className="text-lg md:text-xl">
+                Investments Tracker
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col space-y-2 md:space-y-4">
@@ -110,3 +113,5 @@ export default function InvestmentsTracker() {
     </div>
   );
 }
+
+export default withAuth(InvestmentsTracker);

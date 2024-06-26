@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
+import { withAuth } from "@/components/withAuth";
 import BillsForm from "../components/bills/BillsForm";
 import BillCard from "../components/bills/BillCard";
 import Nav from "@/components/Nav";
@@ -14,7 +15,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
-export default function Bills() {
+function Bills() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
@@ -156,3 +157,5 @@ export default function Bills() {
     </div>
   );
 }
+
+export default withAuth(Bills);

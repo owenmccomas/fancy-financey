@@ -78,7 +78,7 @@ export function Outline() {
                 isSavingsLoading ||
                 isAssetsLoading ||
                 isInvestmentsLoading ? (
-                  <Skeleton className="h-20 w-[300px] bg-gray-300" />
+                  <Skeleton className="h-20 w-[500px] bg-gray-300 my-10" />
                 ) : (
                   `$${netWorth.toFixed(2)}`
                 )}
@@ -152,7 +152,8 @@ export function Outline() {
             />
             <div className="col-span-1 my-2 h-px border-r bg-gray-300 sm:col-span-3"></div>
             <p className="col-span-1 text-gray-500 dark:text-gray-400 sm:col-span-3">
-              Trackers for your Bills and your Goals (Doesn&apos;t Affect Net Worth)
+              Trackers for your Bills and your Goals (Doesn&apos;t Affect Net
+              Worth)
             </p>
             <HomeCard
               href="/bills"

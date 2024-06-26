@@ -8,7 +8,6 @@ import {
   PiggyBankIcon,
   SettingsIcon,
   TrendingUpIcon,
-  UserIcon,
   WalletIcon,
   BriefcaseIcon,
   SignoutIcon,
@@ -57,7 +56,7 @@ const navItems = [
       label: "Goals",
     },
     {
-      href: "/",
+      href: "/sign-out",
       icon: <SignoutIcon className="h-7 w-7" />,
       label: "Signout",
       onClick: () => signOut(),

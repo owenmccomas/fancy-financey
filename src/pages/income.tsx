@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
+import { withAuth } from "@/components/withAuth";
 import IncomeCard from "@/components/income/IncomeCard";
 import IncomeForm from "@/components/income/IncomeForm";
 import Nav from "@/components/Nav";
@@ -14,7 +15,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
 
-export default function IncomeTracker() {
+function IncomeTracker() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
@@ -155,3 +156,5 @@ export default function IncomeTracker() {
     </div>
   );
 }
+
+export default withAuth(IncomeTracker);
