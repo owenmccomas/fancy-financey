@@ -44,7 +44,7 @@ export default function GoalsForm({ onAddGoal }: GoalsFormProps) {
       targetAmount: Number(data.targetAmount),
       currentAmount: Number(data.currentAmount),
       priority: Number(data.priority),
-      description: data.description ?? null,
+      description: data.description ?? '',
     });
     reset();
     setSelectedCategory("");

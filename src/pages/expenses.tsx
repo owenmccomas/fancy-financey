@@ -14,17 +14,29 @@ import {
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
+import type { Expense } from "@prisma/client";
+
+interface NewExpenseInput {
+  title: string;
+  amount: number;
+  date: string;
+  category: string;
+  description?: string;
+}
 
 function Expenses() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: expenses, refetch: refetchExpenses, isLoading } = api.expenses.getAll.useQuery();
+  const utils = api.useUtils();
+
+  const { data: expenses, isLoading } = api.expenses.getAll.useQuery();
   const { data: totalExpenses } = api.expenses.getTotalExpenses.useQuery();
 
   const addExpenseMutation = api.expenses.create.useMutation({
     onSuccess: async () => {
-      await refetchExpenses();
+      await utils.expenses.getAll.invalidate();
+      await utils.expenses.getTotalExpenses.invalidate();
       setIsDrawerOpen(false);
       toast({
         title: "Expense added",
@@ -42,7 +54,8 @@ function Expenses() {
 
   const updateExpenseMutation = api.expenses.update.useMutation({
     onSuccess: async () => {
-      await refetchExpenses();
+      await utils.expenses.getAll.invalidate();
+      await utils.expenses.getTotalExpenses.invalidate();
       toast({
         title: "Expense updated",
         description: "Your expense has been updated successfully.",
@@ -59,7 +72,8 @@ function Expenses() {
 
   const deleteExpenseMutation = api.expenses.delete.useMutation({
     onSuccess: async () => {
-      await refetchExpenses();
+      await utils.expenses.getAll.invalidate();
+      await utils.expenses.getTotalExpenses.invalidate();
       toast({
         title: "Expense deleted",
         description: "Your expense has been deleted successfully.",
@@ -74,27 +88,23 @@ function Expenses() {
     },
   });
 
-  const addExpense = (newExpense: {
-    title: string;
-    amount: number;
-    date: string;
-    category: string;
-    description?: string;
-  }) => {
+  const addExpense = (newExpense: NewExpenseInput) => {
     addExpenseMutation.mutate({
       ...newExpense,
       date: new Date(newExpense.date),
     });
   };
 
-  const updateExpense = (updatedExpense: {
-    id: number;
-    amount?: number;
-    date?: Date;
-    category?: string;
-    description?: string | null;
-  }) => {
-    updateExpenseMutation.mutate(updatedExpense);
+  const updateExpense = (updatedExpense: Partial<Expense> & { id: number }) => {
+    const mutationInput: Partial<Expense> & { id: number } = {
+      ...updatedExpense,
+      date: updatedExpense.date instanceof Date 
+        ? updatedExpense.date 
+        : updatedExpense.date 
+          ? new Date(updatedExpense.date) 
+          : undefined,
+    };
+    updateExpenseMutation.mutate(mutationInput);
   };
 
   const deleteExpense = (id: number) => {

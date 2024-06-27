@@ -58,6 +58,8 @@ export default function GoalCard({
     const updatedValues: UpdateGoalInput = {
       id: goal.id,
       ...values,
+      targetAmount: Number(values.targetAmount),
+      currentAmount: Number(values.currentAmount), // Convert to number
       targetDate: new Date(values.targetDate),
       status: goal.status as GoalStatus,
       description: values.description ?? null,

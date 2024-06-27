@@ -1,25 +1,36 @@
 export interface NewGoalInput {
-    title: string;
-    targetAmount: number;
-    currentAmount: number;
-    targetDate: string;
-    category: string;
-    description?: string | null;
-    priority: number;
-  }
-  
-  export type GoalStatus = "In Progress" | "Completed" | "Cancelled";
-  
-  export type UpdateGoalInput = Partial<Omit<NewGoalInput, "targetDate">> & {
-    id: number;
-    targetDate?: Date;
-    status?: GoalStatus;
-  };
-  
-  export type GoalApiInput = Omit<NewGoalInput, "targetDate"> & {
-    targetDate: Date;
-    description: string | undefined;
-  };
+  title: string;
+  description?: string;
+  targetAmount: number;
+  currentAmount: number;
+  targetDate: string;
+  category: string;
+  priority?: number;
+}
+
+export interface UpdateGoalInput {
+  id: number;
+  title?: string;
+  description?: string | null;
+  targetAmount?: number;
+  currentAmount?: number;
+  targetDate?: Date;
+  category?: string;
+  priority?: number;
+  status?: GoalStatus;
+}
+
+export type GoalStatus = 'In Progress' | 'Completed' | 'Cancelled';
+
+export interface GoalApiInput {
+  title: string;
+  description?: string;
+  targetAmount: number;
+  currentAmount: number;
+  targetDate: Date;
+  category: string;
+  priority?: number;
+}
   
   export type GoalFormData = Omit<NewGoalInput, "description" | "targetDate"> & {
     description?: string;

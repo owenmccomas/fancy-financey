@@ -14,21 +14,29 @@ import {
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
+import type { Asset } from "@prisma/client";
+
+interface NewAssetInput {
+  name: string;
+  value: number;
+  date: string;
+  category: string;
+  description?: string;
+}
 
 function Assets() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const {
-    data: assets,
-    refetch: refetchAssets,
-    isLoading,
-  } = api.assets.getAll.useQuery();
+  const utils = api.useUtils();
+
+  const { data: assets, isLoading } = api.assets.getAll.useQuery();
   const { data: totalAssetValue } = api.assets.getTotalAssetValue.useQuery();
 
   const addAssetMutation = api.assets.create.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await utils.assets.getAll.invalidate();
+      await utils.assets.getTotalAssetValue.invalidate();
       setIsDrawerOpen(false);
       toast({
         title: "Asset added",
@@ -46,7 +54,8 @@ function Assets() {
 
   const updateAssetMutation = api.assets.update.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await utils.assets.getAll.invalidate();
+      await utils.assets.getTotalAssetValue.invalidate();
       toast({
         title: "Asset updated",
         description: "Your asset has been updated successfully.",
@@ -63,7 +72,8 @@ function Assets() {
 
   const deleteAssetMutation = api.assets.delete.useMutation({
     onSuccess: async () => {
-      await refetchAssets();
+      await utils.assets.getAll.invalidate();
+      await utils.assets.getTotalAssetValue.invalidate();
       toast({
         title: "Asset deleted",
         description: "Your asset has been deleted successfully.",
@@ -78,28 +88,23 @@ function Assets() {
     },
   });
 
-  const addAsset = (newAsset: {
-    name: string;
-    value: number;
-    date: string;
-    category: string;
-    description?: string;
-  }) => {
+  const addAsset = (newAsset: NewAssetInput) => {
     addAssetMutation.mutate({
       ...newAsset,
       date: new Date(newAsset.date),
     });
   };
 
-  const updateAsset = (updatedAsset: {
-    id: number;
-    name?: string;
-    value?: number;
-    date?: Date;
-    category?: string;
-    description?: string | null;
-  }) => {
-    updateAssetMutation.mutate(updatedAsset);
+  const updateAsset = (updatedAsset: Partial<Asset> & { id: number }) => {
+    const mutationInput: Partial<Asset> & { id: number } = {
+      ...updatedAsset,
+      date: updatedAsset.date instanceof Date 
+        ? updatedAsset.date 
+        : updatedAsset.date 
+          ? new Date(updatedAsset.date) 
+          : undefined,
+    };
+    updateAssetMutation.mutate(mutationInput);
   };
 
   const deleteAsset = (id: number) => {

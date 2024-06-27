@@ -56,7 +56,7 @@ export default function IncomeForm({ onAddIncome }: IncomeFormProps) {
       className="mx-auto min-w-[600px] max-w-[800px] space-y-4 px-4 py-10 sm:px-6 lg:px-8"
     >
       <div>
-        <label className="block text-sm font-medium text-gray-700">Amount</label>
+        <label className="block text-sm font-medium text-gray-700">Monthly Amount</label>
         <Input
           id="amount"
           type="number"

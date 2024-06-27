@@ -86,7 +86,7 @@ export default function IncomeCard({
           <DialogHeader>
             <DialogTitle>Edit {income.source} Income</DialogTitle>
             <DialogDescription>
-              Update your {income.source.toLowerCase()} income here.
+              Update your monthly {income.source.toLowerCase()} income here.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
