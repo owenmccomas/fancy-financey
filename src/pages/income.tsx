@@ -14,21 +14,28 @@ import {
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
+import type { Income } from "@prisma/client";
+
+interface NewIncomeInput {
+  amount: number;
+  date: string;
+  source: string;
+  description?: string;
+}
 
 function IncomeTracker() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const {
-    data: incomes,
-    refetch: refetchIncomes,
-    isLoading,
-  } = api.income.getAll.useQuery();
+  const utils = api.useUtils();
+
+  const { data: incomes, isLoading } = api.income.getAll.useQuery();
   const { data: totalIncome } = api.income.getTotalIncome.useQuery();
 
   const addIncomeMutation = api.income.create.useMutation({
     onSuccess: async () => {
-      await refetchIncomes();
+      await utils.income.getAll.invalidate();
+      await utils.income.getTotalIncome.invalidate();
       setIsDrawerOpen(false);
       toast({
         title: "Income added",
@@ -46,7 +53,8 @@ function IncomeTracker() {
 
   const updateIncomeMutation = api.income.update.useMutation({
     onSuccess: async () => {
-      await refetchIncomes();
+      await utils.income.getAll.invalidate();
+      await utils.income.getTotalIncome.invalidate();
       toast({
         title: "Income updated",
         description: "Your income has been updated successfully.",
@@ -63,7 +71,8 @@ function IncomeTracker() {
 
   const deleteIncomeMutation = api.income.delete.useMutation({
     onSuccess: async () => {
-      await refetchIncomes();
+      await utils.income.getAll.invalidate();
+      await utils.income.getTotalIncome.invalidate();
       toast({
         title: "Income deleted",
         description: "Your income has been deleted successfully.",
@@ -78,26 +87,23 @@ function IncomeTracker() {
     },
   });
 
-  const addIncome = (newIncome: {
-    amount: number;
-    date: string;
-    source: string;
-    description?: string;
-  }) => {
+  const addIncome = (newIncome: NewIncomeInput) => {
     addIncomeMutation.mutate({
       ...newIncome,
       date: new Date(newIncome.date),
     });
   };
 
-  const updateIncome = (updatedIncome: {
-    id: number;
-    amount?: number;
-    date?: Date;
-    source?: string;
-    description?: string | null;
-  }) => {
-    updateIncomeMutation.mutate(updatedIncome);
+  const updateIncome = (updatedIncome: Partial<Income> & { id: number }) => {
+    const mutationInput: Partial<Income> & { id: number } = {
+      ...updatedIncome,
+      date: updatedIncome.date instanceof Date 
+        ? updatedIncome.date 
+        : updatedIncome.date 
+          ? new Date(updatedIncome.date) 
+          : undefined,
+    };
+    updateIncomeMutation.mutate(mutationInput);
   };
 
   const deleteIncome = (id: number) => {

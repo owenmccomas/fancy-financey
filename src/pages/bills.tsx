@@ -14,21 +14,29 @@ import {
 } from "@/components/ui/drawer";
 import { useToast } from "@/components/ui/use-toast";
 import { CardSkeletonGroup } from "@/components/CardSkeleton";
+import type { Bill } from "@prisma/client";
+
+interface NewBillInput {
+  title: string;
+  amount: number;
+  dueDate: string;
+  category: string;
+  description?: string;
+}
 
 function Bills() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
-  const {
-    data: bills,
-    refetch: refetchBills,
-    isLoading,
-  } = api.bills.getAll.useQuery();
+  const utils = api.useUtils();
+
+  const { data: bills, isLoading } = api.bills.getAll.useQuery();
   const { data: totalBills } = api.bills.getTotalBills.useQuery();
 
   const addBillMutation = api.bills.create.useMutation({
     onSuccess: async () => {
-      await refetchBills();
+      await utils.bills.getAll.invalidate();
+      await utils.bills.getTotalBills.invalidate();
       setIsDrawerOpen(false);
       toast({
         title: "Bill added",
@@ -46,7 +54,8 @@ function Bills() {
 
   const updateBillMutation = api.bills.update.useMutation({
     onSuccess: async () => {
-      await refetchBills();
+      await utils.bills.getAll.invalidate();
+      await utils.bills.getTotalBills.invalidate();
       toast({
         title: "Bill updated",
         description: "Your bill has been updated successfully.",
@@ -63,7 +72,8 @@ function Bills() {
 
   const deleteBillMutation = api.bills.delete.useMutation({
     onSuccess: async () => {
-      await refetchBills();
+      await utils.bills.getAll.invalidate();
+      await utils.bills.getTotalBills.invalidate();
       toast({
         title: "Bill deleted",
         description: "Your bill has been deleted successfully.",
@@ -78,27 +88,23 @@ function Bills() {
     },
   });
 
-  const addBill = (newBill: {
-    title: string;
-    amount: number;
-    dueDate: string;
-    category: string;
-    description?: string;
-  }) => {
+  const addBill = (newBill: NewBillInput) => {
     addBillMutation.mutate({
       ...newBill,
       dueDate: new Date(newBill.dueDate),
     });
   };
 
-  const updateBill = (updatedBill: {
-    id: number;
-    amount?: number;
-    dueDate?: Date;
-    category?: string;
-    description?: string | null;
-  }) => {
-    updateBillMutation.mutate(updatedBill);
+  const updateBill = (updatedBill: Partial<Bill> & { id: number }) => {
+    const mutationInput: Partial<Bill> & { id: number } = {
+      ...updatedBill,
+      dueDate: updatedBill.dueDate instanceof Date 
+        ? updatedBill.dueDate 
+        : updatedBill.dueDate 
+          ? new Date(updatedBill.dueDate) 
+          : undefined,
+    };
+    updateBillMutation.mutate(mutationInput);
   };
 
   const deleteBill = (id: number) => {

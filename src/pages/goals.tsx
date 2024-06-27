@@ -5,6 +5,7 @@ import GoalCard from "@/components/goals/GoalCard";
 import GoalsForm from "@/components/goals/GoalsForm";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Drawer,
   DrawerClose,
@@ -17,6 +18,7 @@ import { CardSkeletonGroup } from "@/components/CardSkeleton";
 import type { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
 
 function Goals() {
+  const queryClient = useQueryClient();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
@@ -25,11 +27,14 @@ function Goals() {
     refetch: refetchGoals,
     isLoading,
   } = api.goals.getAll.useQuery();
-  const { data: totalGoalProgress } = api.goals.getTotalProgress.useQuery();
+  const { data: totalGoalProgress, refetch: refetchTotalGoalProgress } = api.goals.getTotalProgress.useQuery();
+
+  const utils = api.useUtils();
 
   const addGoalMutation = api.goals.create.useMutation({
     onSuccess: async () => {
-      await refetchGoals();
+      await utils.goals.getAll.invalidate();
+      await utils.goals.getTotalProgress.invalidate();
       setIsDrawerOpen(false);
       toast({
         title: "Goal added",
@@ -44,10 +49,11 @@ function Goals() {
       });
     },
   });
-
+  
   const updateGoalMutation = api.goals.update.useMutation({
     onSuccess: async () => {
-      await refetchGoals();
+      await utils.goals.getAll.invalidate();
+      await utils.goals.getTotalProgress.invalidate();
       toast({
         title: "Goal updated",
         description: "Your goal has been updated successfully.",
@@ -61,10 +67,11 @@ function Goals() {
       });
     },
   });
-
+  
   const deleteGoalMutation = api.goals.delete.useMutation({
     onSuccess: async () => {
-      await refetchGoals();
+      await utils.goals.getAll.invalidate();
+      await utils.goals.getTotalProgress.invalidate();
       toast({
         title: "Goal deleted",
         description: "Your goal has been deleted successfully.",
@@ -83,16 +90,17 @@ function Goals() {
     const apiInput: GoalApiInput = {
       ...newGoal,
       targetDate: new Date(newGoal.targetDate),
-      description: newGoal.description ?? undefined,
     };
     addGoalMutation.mutate(apiInput);
   };
 
   const updateGoal = (updatedGoal: UpdateGoalInput) => {
-    updateGoalMutation.mutate({
+    const apiInput = {
       ...updatedGoal,
       description: updatedGoal.description ?? undefined,
-    });
+      targetDate: updatedGoal.targetDate ? new Date(updatedGoal.targetDate) : undefined,
+    };
+    updateGoalMutation.mutate(apiInput);
   };
 
   const deleteGoal = (id: number) => {
