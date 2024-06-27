@@ -5,7 +5,6 @@ import GoalCard from "@/components/goals/GoalCard";
 import GoalsForm from "@/components/goals/GoalsForm";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
-import { useQueryClient } from '@tanstack/react-query';
 import {
   Drawer,
   DrawerClose,
@@ -18,16 +17,14 @@ import { CardSkeletonGroup } from "@/components/CardSkeleton";
 import type { NewGoalInput, UpdateGoalInput, GoalApiInput } from "@/types";
 
 function Goals() {
-  const queryClient = useQueryClient();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
   const {
     data: goals,
-    refetch: refetchGoals,
     isLoading,
   } = api.goals.getAll.useQuery();
-  const { data: totalGoalProgress, refetch: refetchTotalGoalProgress } = api.goals.getTotalProgress.useQuery();
+  const { data: totalGoalProgress } = api.goals.getTotalProgress.useQuery();
 
   const utils = api.useUtils();
 
