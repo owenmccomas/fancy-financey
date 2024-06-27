@@ -13,17 +13,20 @@ function InvestmentsTracker() {
   const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { data: investmentsAmount, refetch: refetchInvestments } =
-    api.investments.get.useQuery();
+  const utils = api.useUtils();
+
+  const { data: investmentsAmount } = api.investments.get.useQuery();
   const { mutate: updateInvestments } = api.investments.update.useMutation({
     onSuccess: async () => {
-      console.log("Investments updated successfully");
-      await refetchInvestments();
+      await utils.investments.get.invalidate();
+      setInput("");
+      setShowAlert(false);
+      setErrorMessage("");
     },
     onError: (error) => {
-      console.error("Detailed error updating investments:", error);
+      console.error("Error updating investments:", error);
       setErrorMessage(
-        `An error occurred while updating investments: ${error.message}`,
+        `An error occurred while updating investments: ${error.message}`
       );
       setShowAlert(true);
     },
@@ -35,23 +38,27 @@ function InvestmentsTracker() {
 
   const handleUpdateInvestments = (operation: "add" | "subtract") => {
     const amount = parseFloat(input);
-    if (!isNaN(amount)) {
-      const newAmount =
-        operation === "add"
-          ? (investmentsAmount ?? 0) + amount
-          : Math.max((investmentsAmount ?? 0) - amount, 0);
-      console.log("Attempting to update investments with amount:", newAmount);
+    if (!isNaN(amount) && amount > 0) {
+      const currentAmount = investmentsAmount ?? 0;
+      let newAmount: number;
+      let mutationAmount: number;
+  
+      if (operation === "add") {
+        newAmount = currentAmount + amount;
+        mutationAmount = amount;
+      } else {
+        newAmount = Math.max(currentAmount - amount, 0);
+        mutationAmount = -amount; 
+      }
+  
       updateInvestments({
         type: "investment",
-        name: "",
-        amountInvested: newAmount,
+        name: operation === "add" ? "Deposit" : "Withdrawal",
+        amountInvested: mutationAmount,
         currentValue: newAmount,
       });
-      setInput("");
-      setShowAlert(false);
-      setErrorMessage("");
     } else {
-      setErrorMessage("Please enter a valid number.");
+      setErrorMessage("Please enter a valid positive number.");
       setShowAlert(true);
     }
   };

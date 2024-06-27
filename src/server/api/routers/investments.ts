@@ -10,7 +10,10 @@ export const investmentsRouter = createTRPCRouter({
         where: { userId: ctx.session.user.id },
       });
       console.log("Fetched investments:", investments);
-      const totalInvested = investments.reduce((sum, inv) => sum + inv.amountInvested, 0);
+      const totalInvested = investments.reduce(
+        (sum, inv) => sum + inv.amountInvested,
+        0,
+      );
       return totalInvested;
     } catch (error) {
       console.error("Detailed error in investments.get:", error);
@@ -22,15 +25,20 @@ export const investmentsRouter = createTRPCRouter({
   }),
 
   update: protectedProcedure
-    .input(z.object({ 
-      name: z.string(),
-      type: z.string(),
-      amountInvested: z.number(),
-      currentValue: z.number(),
-    }))
+    .input(
+      z.object({
+        name: z.string(),
+        type: z.string(),
+        amountInvested: z.number(),
+        currentValue: z.number(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       try {
-        console.log("Adding/Updating investment for user:", ctx.session.user.id);
+        console.log(
+          "Adding/Updating investment for user:",
+          ctx.session.user.id,
+        );
         console.log("Investment details:", input);
 
         const newInvestment = await ctx.db.investment.create({
